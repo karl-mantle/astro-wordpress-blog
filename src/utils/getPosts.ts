@@ -1,64 +1,113 @@
 import { wpQuery } from './wpQuery';
-import type { Post, PostsRes, SinglePost, SinglePostRes, Page, PagesRes, SinglePage, SinglePageRes } from '../types';
 
-export async function getAllPostsWithSlugs(): Promise<Post[] | undefined> {
-  const data: PostsRes = await wpQuery({
-    query: `
-      {
-        posts(first: 10000) {
-          edges {
+export async function getAllUris() {
+  const res = await wpQuery({
+    query: `query GetAllUris {
+      terms {
+        nodes {
+          uri
+        }
+      }
+      posts(first: 100) {
+        nodes {
+          uri
+        }
+      }
+      pages(first: 100) {
+        nodes {
+          uri
+        }
+      }
+    }`
+  });
+
+  const uris = Object.values(res)
+    // combine nodes
+    .reduce((acc, currentValue) => acc.concat(currentValue.nodes), [])
+    // filter nodes
+    .filter(node => node.uri !== null)
+    // format nodes
+    .map(node => {
+      let trimmedURI = node.uri.substring(1);
+      trimmedURI = trimmedURI.substring(0, trimmedURI.length - 1);
+      return { params: { uri: trimmedURI } };
+    });
+
+  return uris;
+}
+
+export async function getNodeByURI(uri: string) {
+  const res = await wpQuery({
+    query: `query GetNodeByURI($uri: String!) {
+      nodeByUri(uri: $uri) {
+        __typename
+        isContentNode
+        isTermNode
+        ... on Post {
+          id
+          title
+          date
+          uri
+          excerpt
+          content
+          categories {
+            nodes {
+              name
+              uri
+            }
+          }
+          featuredImage {
             node {
-              slug
+              srcSet
+              sourceUrl
+              altText
+              mediaDetails {
+                height
+                width
+              }
+            }
+          }
+        }
+        ... on Page {
+          id
+          title
+          uri
+          date
+          content
+        }
+        ... on Category {
+          id
+          name
+          posts {
+            nodes {
+              date
+              title
+              excerpt
+              uri
+              categories {
+                nodes {
+                  name
+                  uri
+                }
+              }
+              featuredImage {
+                node {
+                  srcSet
+                  sourceUrl
+                  altText
+                  mediaDetails {
+                    height
+                    width
+                  }
+                }
+              }
             }
           }
         }
       }
-    `
+    }`,
+    variables: { uri }
   });
-  return data?.posts?.edges.map(edge => edge.node);
-}
 
-export async function getPostBySlug(slug: string): Promise<SinglePost | undefined> {
-  const data: SinglePostRes = await wpQuery({
-    query: `
-      {
-        post(id: "${slug}", idType: URI) {
-          title
-          content
-        }
-      }
-    `
-  });
-  return data?.post;
-}
-
-export async function getAllPagesWithSlugs(): Promise<Page[] | undefined> {
-  const data: PagesRes = await wpQuery({
-    query: `
-      {
-        pages(first: 10000) {
-          edges {
-            node {
-              slug
-            }
-          }
-        }
-      }
-    `
-  });
-  return data?.pages?.edges.map(edge => edge.node);
-}
-
-export async function getPageBySlug(slug: string): Promise<SinglePage | undefined> {
-  const data: SinglePageRes = await wpQuery({
-    query: `
-      {
-        page(id: "${slug}", idType: URI) {
-          title
-          content
-        }
-      }
-    `
-  });
-  return data?.page;
+  return { nodeByUri: res.nodeByUri }
 }

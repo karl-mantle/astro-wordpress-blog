@@ -1,47 +1,27 @@
 // Posts
-export interface Post {
-  slug: string;
-}
-
-export interface PostEdge {
-node: Post;
-}
-
-export interface PostsRes {
-posts: {
-  edges: PostEdge[];
-};
-}
-
-export interface SinglePost {
-title: string;
-content: string;
-}
-
-export interface SinglePostRes {
-post: SinglePost;
-}
-
-// Pages
-export interface Page {
-    slug: string;
-  }
-
-export interface PageEdge {
-  node: Page;
-}
-
-export interface PagesRes {
-  pages: {
-    edges: PageEdge[];
+export interface NodeByUri {
+  __typename: string;
+  isContentNode: boolean;
+  isTermNode: boolean;
+  title?: string;
+  uri?: string;
+  date?: string;
+  content?: string;
+  categories?: {
+    nodes: {
+      name: string;
+      uri: string;
+    }[];
   };
-}
-
-export interface SinglePage {
-  title: string;
-  content: string;
-}
-
-export interface SinglePageRes {
-  page: SinglePage;
+  featuredImage?: {
+    node: {
+      srcSet: string;
+      sourceUrl: string;
+      altText: string;
+      mediaDetails: {
+        height: number;
+        width: number;
+      };
+    };
+  };
 }

@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageLayout from '../layouts/PageLayout.astro';
+import PostLayout from '../layouts/PostLayout.astro';
+import CategoryLayout from '../layouts/CategoryLayout.astro';
+import { getAllUris, getNodeByURI } from "../utils/getPosts.ts";
+import type { NodeByUri } from "../types.ts";
+
+const uri = `/${Astro.params.uri}/`;
+const data = await getNodeByURI(uri);
+const node: NodeByUri = data.nodeByUri;
+
+export async function getStaticPaths() {
+  return await getAllUris();
+}
+
+---
+
+<BaseLayout title={node.title} description={node.excerpt}>
+  {node.__typename === 'Post' && <PageLayout node={node} />}
+  {node.__typename === 'Page' && <PostLayout node={node} />}
+  {node.__typename === 'Category' && <CategoryLayout node={node} />}
+</BaseLayout>
