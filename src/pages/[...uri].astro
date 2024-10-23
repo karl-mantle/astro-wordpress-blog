@@ -1,14 +1,34 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageLayout from '../layouts/PageLayout.astro';
-import PostLayout from '../layouts/PostLayout.astro';
-import CategoryLayout from '../layouts/CategoryLayout.astro';
+import PageTemplate from '../templates/PageTemplate.astro';
+import PostSingleTemplate from '../templates/PostSingleTemplate.astro';
+import CategoryTemplate from '../templates/CategoryTemplate.astro';
 import { getAllUris, getNodeByURI } from "../utils/getPosts.ts";
 import type { NodeByUri } from "../types.ts";
 
 const uri = `/${Astro.params.uri}/`;
 const data = await getNodeByURI(uri);
 const node: NodeByUri = data.nodeByUri;
+
+function resolveTemplate(node) {
+  let template;
+  switch (node.__typename) {
+    case 'Page':
+      template = PageTemplate;
+      break;
+    case 'Post':
+      template = PostSingleTemplate;
+      break;
+    case 'Category':
+      template = CategoryTemplate;
+      break;
+    default:
+      template = PageTemplate;
+  }
+  return template;
+}
+
+const Template = resolveTemplate(node);
 
 export async function getStaticPaths() {
   return await getAllUris();
@@ -17,7 +37,5 @@ export async function getStaticPaths() {
 ---
 
 <BaseLayout title={node.title} description={node.excerpt}>
-  {node.__typename === 'Post' && <PageLayout node={node} />}
-  {node.__typename === 'Page' && <PostLayout node={node} />}
-  {node.__typename === 'Category' && <CategoryLayout node={node} />}
+  <Template node={node} />
 </BaseLayout>
