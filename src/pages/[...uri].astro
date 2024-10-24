@@ -10,7 +10,7 @@ const uri = `/${Astro.params.uri}/`;
 const data = await getNodeByURI(uri);
 const node: NodeByUri = data.nodeByUri;
 
-function resolveTemplate(node) {
+function resolveTemplate(node: NodeByUri) {
   let template;
   switch (node.__typename) {
     case 'Page':

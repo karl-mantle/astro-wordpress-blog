@@ -1,7 +1,8 @@
 import { wpQuery } from './wpQuery';
+import type { GetAllUrisResponse, UriNode } from '../types';
 
-export async function getAllUris() {
-  const res = await wpQuery({
+export async function getAllUris(): Promise<{ params: { uri: string } }[]> {
+  const res: GetAllUrisResponse = await wpQuery({
     query: `query GetAllUris {
       terms {
         nodes {
@@ -23,11 +24,11 @@ export async function getAllUris() {
 
   const uris = Object.values(res)
     // combine nodes
-    .reduce((acc, currentValue) => acc.concat(currentValue.nodes), [])
+    .reduce((acc, currentValue) => acc.concat(currentValue.nodes), [] as UriNode[])
     // filter nodes
-    .filter(node => node.uri !== null)
+    .filter((node: UriNode) => node.uri !== null)
     // format nodes
-    .map(node => {
+    .map((node: UriNode) => {
       let trimmedURI = node.uri.substring(1);
       trimmedURI = trimmedURI.substring(0, trimmedURI.length - 1);
       return { params: { uri: trimmedURI } };
