@@ -1,5 +1,5 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+import BasicLayout from '../layouts/BasicLayout.astro';
 import PageTemplate from '../templates/PageTemplate.astro';
 import PostSingleTemplate from '../templates/PostSingleTemplate.astro';
 import CategoryTemplate from '../templates/CategoryTemplate.astro';
@@ -33,9 +33,8 @@ const Template = resolveTemplate(node);
 export async function getStaticPaths() {
   return await getAllUris();
 }
-
 ---
 
-<BaseLayout title={node.title} description={node.excerpt}>
+<BasicLayout title={node.seo?.title || node.title} description={node.seo?.metaDesc}>
   <Template node={node} />
-</BaseLayout>
+</BasicLayout>

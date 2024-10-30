@@ -1,15 +1,12 @@
 ---
-import '../styles/global.css';
-
-interface Props {
-  title: string;
-  description: string;
-  image?: string;
-}
+import type { NodeByUri, MetaData } from '../../types';
+import '../../styles/global.css';
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = '/blog-placeholder-1.jpg' } = Astro.props;
+const { title, description }: Partial<NodeByUri> = Astro.props;
+// need to decide if we're going to use WordPress image optimisation or Astro's
+const { image = '/blog-placeholder-1.jpg' }: Partial<MetaData> = Astro.props;
 ---
 
 <!-- Global Metadata -->

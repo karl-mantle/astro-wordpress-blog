@@ -68,6 +68,14 @@ export async function getNodeByURI(uri: string) {
               }
             }
           }
+          seo {
+            breadcrumbs {
+              text
+              url
+            }
+            metaDesc
+            title
+          }
         }
         ... on Page {
           id
@@ -75,6 +83,14 @@ export async function getNodeByURI(uri: string) {
           uri
           date
           content
+          seo {
+            breadcrumbs {
+              text
+              url
+            }
+            metaDesc
+            title
+          }
         }
         ... on Category {
           id
@@ -103,6 +119,15 @@ export async function getNodeByURI(uri: string) {
                 }
               }
             }
+          }
+          description
+          seo {
+            breadcrumbs {
+              text
+              url
+            }
+            metaDesc
+            title
           }
         }
       }
