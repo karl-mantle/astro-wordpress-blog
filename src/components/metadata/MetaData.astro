@@ -1,6 +1,10 @@
 ---
-import type { NodeByUri, MetaData } from '../../types';
+import type { NodeByUri } from '../../types';
 import '../../styles/global.css';
+
+interface MetaData {
+  image: string;
+};
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 

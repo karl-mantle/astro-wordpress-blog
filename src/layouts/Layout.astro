@@ -2,16 +2,15 @@
 import MetaData from '../components/metadata/MetaData.astro';
 import Header from '../components/header/Header.astro';
 import Footer from '../components/footer/Footer.astro';
-import type { NodeByUri } from '../types';
+import type { YoastSEO } from '../types.ts';
 
-// isn't 1:1 with the node title and description as it's via Yoast
-const { title, description }: Partial<NodeByUri> = Astro.props;
+const { title, metaDesc } : Partial<YoastSEO> = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <MetaData title={title} description={description} />
+    <MetaData title={title} metaDesc={metaDesc} />
   </head>
 
   <body>

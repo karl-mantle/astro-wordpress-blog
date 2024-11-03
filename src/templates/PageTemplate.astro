@@ -1,9 +1,9 @@
 ---
-const { node } = Astro.props;
+import type { NodeByUri } from '../types';
+
+const { node } = Astro.props as { node: NodeByUri };
 ---
-<div class="flex flex-col p-10">
-  <div class="mb-5 text-4xl font-bold"></div>
-  <article class="prose lg:prose-xl">
-    <h1>{node.title}</h1>
-  </article>
+
+<div class="flex flex-col" set:html={node.content}>
+    <!-- set:html content -->
 </div>

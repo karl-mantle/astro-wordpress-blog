@@ -1,16 +1,35 @@
 import { wpQuery } from './wpQuery';
-import type { MetaData } from '../types';
+import type { SchemaData, SocialData } from '../types';
 
-// meta titles & descriptions are imported on a per-post basis
-export async function getGlobalMetaData(): Promise<{ metadata: MetaData }> {
+export async function getSchemaData(): Promise<SchemaData> {
   const res = await wpQuery({
-    query: `query getMetaData {
+    query: `query getSchemaData {
       seo {
         openGraph {
           defaultImage {
             sourceUrl
           }
         }
+        schema {
+          logo {
+            sourceUrl
+          }
+          companyName
+          siteName
+          personName
+          companyOrPerson
+        }
+      }
+    }`
+  });
+
+  return res.seo;
+}
+
+export async function getSocialData(): Promise<SocialData> {
+  const res = await wpQuery({
+    query: `query getSocialData {
+      seo {
         social {
           facebook {
             url
@@ -37,18 +56,9 @@ export async function getGlobalMetaData(): Promise<{ metadata: MetaData }> {
             url
           }
         }
-        schema {
-          logo {
-            sourceUrl
-          }
-          companyName
-          siteName
-          personName
-          companyOrPerson
-        }
       }
     }`
   });
 
-  return { metadata: res.seo };
+  return res.seo.social;
 }

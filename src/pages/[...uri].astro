@@ -1,40 +1,44 @@
 ---
-import BasicLayout from '../layouts/BasicLayout.astro';
-import PageTemplate from '../templates/PageTemplate.astro';
-import PostSingleTemplate from '../templates/PostSingleTemplate.astro';
+import Layout from '../layouts/Layout.astro';
 import CategoryTemplate from '../templates/CategoryTemplate.astro';
-import { getAllUris, getNodeByURI } from "../utils/getPosts.ts";
-import type { NodeByUri } from "../types.ts";
+import PageTemplate from '../templates/PageTemplate.astro';
+import PostTemplate from '../templates/PostTemplate.astro';
+import TagTemplate from '../templates/TagTemplate.astro';
+import { getAllUris, getNodeByURI } from '../utils/getPosts.ts';
+import type { NodeByUri } from '../types.ts';
 
 const uri = `/${Astro.params.uri}/`;
 const data = await getNodeByURI(uri);
 const node: NodeByUri = data.nodeByUri;
 
-function resolveTemplate(node: NodeByUri) {
-  let template;
+function resolvePostTypeTemplate(node: NodeByUri) {
+  let postTypeTemplate;
   switch (node.__typename) {
     case 'Page':
-      template = PageTemplate;
+      postTypeTemplate = PageTemplate;
       break;
     case 'Post':
-      template = PostSingleTemplate;
+      postTypeTemplate = PostTemplate;
       break;
     case 'Category':
-      template = CategoryTemplate;
+      postTypeTemplate = CategoryTemplate;
+      break;
+    case 'Tag':
+      postTypeTemplate = TagTemplate;
       break;
     default:
-      template = PageTemplate;
+      postTypeTemplate = PageTemplate;
   }
-  return template;
-}
+  return postTypeTemplate;
+};
 
-const Template = resolveTemplate(node);
+const Template = resolvePostTypeTemplate(node);
 
 export async function getStaticPaths() {
   return await getAllUris();
-}
+};
 ---
 
-<BasicLayout title={node.seo?.title || node.title} description={node.seo?.metaDesc}>
+<Layout title={node.seo?.title || node.title} metaDesc={node.seo?.metaDesc}>
   <Template node={node} />
-</BasicLayout>
+</Layout>

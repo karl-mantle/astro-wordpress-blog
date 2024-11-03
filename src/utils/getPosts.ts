@@ -1,6 +1,7 @@
 import { wpQuery } from './wpQuery';
 import type { GetAllUrisResponse, UriNode } from '../types';
 
+// terms includes tags and categories
 export async function getAllUris(): Promise<{ params: { uri: string } }[]> {
   const res: GetAllUrisResponse = await wpQuery({
     query: `query GetAllUris {
@@ -45,12 +46,11 @@ export async function getNodeByURI(uri: string) {
         isContentNode
         isTermNode
         ... on Post {
-          id
-          title
-          date
           uri
-          excerpt
+          title
           content
+          excerpt
+          dateGmt
           categories {
             nodes {
               name
@@ -59,13 +59,8 @@ export async function getNodeByURI(uri: string) {
           }
           featuredImage {
             node {
-              srcSet
               sourceUrl
               altText
-              mediaDetails {
-                height
-                width
-              }
             }
           }
           seo {
@@ -78,11 +73,15 @@ export async function getNodeByURI(uri: string) {
           }
         }
         ... on Page {
-          id
-          title
           uri
-          date
+          title
           content
+          featuredImage {
+            node {
+              sourceUrl
+              altText
+            }
+          }
           seo {
             breadcrumbs {
               text
@@ -93,33 +92,21 @@ export async function getNodeByURI(uri: string) {
           }
         }
         ... on Category {
-          id
+          uri
           name
-          posts {
-            nodes {
-              date
-              title
-              excerpt
-              uri
-              categories {
-                nodes {
-                  name
-                  uri
-                }
-              }
-              featuredImage {
-                node {
-                  srcSet
-                  sourceUrl
-                  altText
-                  mediaDetails {
-                    height
-                    width
-                  }
-                }
-              }
+          description
+          seo {
+            breadcrumbs {
+              text
+              url
             }
+            metaDesc
+            title
           }
+        }
+        ... on Tag {
+          uri
+          name
           description
           seo {
             breadcrumbs {
