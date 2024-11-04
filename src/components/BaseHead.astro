@@ -1,6 +1,6 @@
 ---
-import type { NodeByUri } from '../../types';
-import '../../styles/global.css';
+import type { NodeByUri } from '../types';
+import '../styles/global.css';
 
 interface MetaData {
   image: string;
@@ -9,7 +9,7 @@ interface MetaData {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const { title, description }: Partial<NodeByUri> = Astro.props;
-// need to decide if we're going to use WordPress image optimisation or Astro's
+// import schema & ogimage
 const { image = '/blog-placeholder-1.jpg' }: Partial<MetaData> = Astro.props;
 ---
 
@@ -40,3 +40,6 @@ const { image = '/blog-placeholder-1.jpg' }: Partial<MetaData> = Astro.props;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+<!-- Stylesheets -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
