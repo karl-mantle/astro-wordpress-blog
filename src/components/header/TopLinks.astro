@@ -1,0 +1,54 @@
+---
+import IconTags from '../icons/IconTags.astro';
+import IconSearch from '../icons/IconSearch.astro';
+import IconBrandGithub from '../icons/IconBrandGithub.astro';
+import IconRss from '../icons/IconRss.astro';
+import IconMoon from '../icons/IconMoon.astro';
+import IconSun from '../icons/IconSun.astro';
+
+const iconHeight = 28;
+const iconWidth = 28;
+---
+<ul class="inline-flex gap-4 justify-end items-center px-5 leading-none">
+
+  <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white md:border-r-2 border-gray-200 dark:border-gray-700">
+    <button
+      class="inline-flex gap-1 md:pr-4"
+      x-on:click="window.open('/blog/tags/', '_self')"
+    >
+      <IconTags height={iconHeight} width={iconWidth}/>
+      <span class="sr-only md:not-sr-only md:self-center md:font-semibold">Tags</span>
+    </button>
+  </li>
+
+  <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+    <button class="m-auto">
+      <IconSearch height={iconHeight} width={iconWidth}/>
+      <span class="sr-only">Search blog</span>
+    </button>
+  </li>
+
+  <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+    <button>
+      <IconRss height={iconHeight} width={iconWidth}/>
+      <span class="sr-only">Subscribe to RSS feed</span>
+    </button>
+  </li>
+
+  <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+    <button
+      x-on:click="window.open('https://github.com/karl-mantle/astro-wordpress-blog/', '_blank', 'noopener,noreferrer')"
+    >
+      <IconBrandGithub height={iconHeight} width={iconWidth}/>
+      <span class="sr-only">Visit the GitHub repository</span>
+    </button>
+  </li>
+
+  <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+    <button @click="toggleDarkMode">
+      <IconSun height={iconHeight} width={iconWidth} classes="hidden dark:block"/>
+      <IconMoon height={iconHeight} width={iconWidth} classes="dark:hidden"/>
+      <span class="sr-only">Toggle dark mode</span>
+    </button>
+  </li>
+</ul>

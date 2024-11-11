@@ -1,0 +1,16 @@
+---
+import { Image } from 'astro:assets';
+import { getSiteLogo } from '../../utils/gqlYoastSeo.ts';
+
+const logo = await getSiteLogo();
+const sourceUrl = logo.sourceUrl;
+const height = logo.mediaDetails.height;
+const width = logo.mediaDetails.width;
+---
+
+<div class="max-w-16 sm:max-w-24">
+  <a href={new URL('/', Astro.url)}>
+    <Image class="aspect-square object-cover" src={sourceUrl} alt="A description of my image." height={height} width={width} />
+    <span class="sr-only">Go to homepage</span>
+  </a>
+</div>

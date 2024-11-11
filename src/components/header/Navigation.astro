@@ -1,0 +1,82 @@
+---
+import IconChevronDown from '../icons/IconChevronDown.astro';
+import IconChevronUp from '../icons/IconChevronUp.astro';
+import { getNavigation } from '../../utils/gqlNavigation.ts';
+import type { MenuItem } from '../../types.ts';
+
+const menuData = await getNavigation();
+
+function createMenuTree(menuItems: MenuItem[]): MenuItem[] {
+  const menuTree: MenuItem[] = [];
+
+  menuItems.forEach(item => {
+    if (!item.parentId) {
+      menuTree.push({ ...item, children: [] });
+    } else {
+      const parent = menuTree.find(parent => parent.id === item.parentId);
+      if (parent) {
+        parent.children.push(item);
+      }
+    }
+  });
+
+  return menuTree;
+}
+
+const menuTree = createMenuTree(menuData.nodes);
+---
+
+<nav class="relative flex justify-end">
+  <ul class="menu inline-flex gap-5 px-5">
+
+    {menuTree.map((item: MenuItem) => (
+      <li
+        key={item.id}
+        class="relative flex flex-col gap-2"
+        x-data="{ open: false }"
+        @keydown.window.escape="open = false"
+      >
+
+        <div class="flex flex-row items-center text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white border-b-2 border-gray-200 hover:border-black dark:border-gray-700 dark:hover:border-white">
+          <a href={item.uri} class="flex p-2 font-medium">{item.label}</a>
+
+          {item.children.length > 0 && (
+            <button
+              class="flex items-center justify-center pr-2"
+              @click="open = !open"
+              @keydown.window.escape="open = false"
+            >
+              <template x-if="!open">
+                <IconChevronDown height={16} width={16} />
+              </template>
+              <template x-if="open">
+                <IconChevronUp height={16} width={16} />
+              </template>
+              <span class="sr-only">{item.label}</span>
+            </button>
+          )}
+        </div>
+
+        {item.children.length > 0 && (
+          <ul
+            class="absolute left-0 top-full z-10 flex flex-col w-full bg-white dark:bg-black shadow-sm dark:shadow-gray-800"
+            x-show="open"
+            @click.away="open = false"
+          >
+            {item.children.map((child: MenuItem) => (
+              <li key={child.id} class="border-b-2 border-gray-200 hover:border-black dark:border-gray-700 dark:hover:border-white">
+                <a href={child.uri} class="block p-2 font-medium text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+                  {child.label}
+                </a>
+              </li>
+            ))}
+
+          </ul>
+        )}
+
+      </li>
+    ))}
+  </ul>
+
+  <div class="absolute bottom-0 -z-40 block w-full border-b-2 border-gray-200 dark:border-gray-700"></div>
+</nav>
