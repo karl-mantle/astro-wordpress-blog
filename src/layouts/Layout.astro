@@ -1,5 +1,5 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
+import Metadata from '../components/Metadata.astro';
 import Header from '../components/header/Header.astro';
 import Footer from '../components/footer/Footer.astro';
 import type { YoastSEO } from '../types.ts';
@@ -10,7 +10,7 @@ const { title, metaDesc } : Partial<YoastSEO> = Astro.props;
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={title} metaDesc={metaDesc} />
+    <Metadata title={title} metaDesc={metaDesc} />
   </head>
 
   <body>

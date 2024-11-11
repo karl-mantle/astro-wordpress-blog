@@ -4,7 +4,7 @@ import CategoryTemplate from '../templates/CategoryTemplate.astro';
 import PageTemplate from '../templates/PageTemplate.astro';
 import PostTemplate from '../templates/PostTemplate.astro';
 import TagTemplate from '../templates/TagTemplate.astro';
-import { getAllUris, getNodeByURI } from '../utils/getPosts.ts';
+import { getAllUris, getNodeByURI } from '../utils/gqlRoutes.ts';
 import type { NodeByUri } from '../types.ts';
 
 const uri = `/${Astro.params.uri}/`;
