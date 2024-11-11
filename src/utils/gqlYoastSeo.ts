@@ -1,5 +1,5 @@
 import { wpQuery } from './wpQuery';
-import type { OpenGraph, SchemaData, SocialData } from '../types';
+import type { OpenGraph, SchemaData, SiteLogo, SocialData } from '../types';
 
 export async function getOpenGraph(): Promise<OpenGraph> {
   const res = await wpQuery({
@@ -17,7 +17,7 @@ export async function getOpenGraph(): Promise<OpenGraph> {
   return res.seo;
 }
 
-export async function getSiteLogo(): Promise<SchemaData> {
+export async function getSiteLogo(): Promise<SiteLogo> {
   const res = await wpQuery({
     query: `query getSiteLogo {
       seo {

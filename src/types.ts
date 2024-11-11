@@ -130,12 +130,19 @@ export interface OpenGraph {
   };
 }
 
+export interface SiteLogo {
+  sourceUrl: string;
+  altText: string;
+  mediaDetails: {
+    height: number;
+    width: number;
+  };
+}
+
 export interface SchemaData {
   seo: {
     schema: {
-      logo: {
-        sourceUrl: string;
-      };
+      logo: SiteLogo;
       companyName: string;
       siteName: string;
       personName: string;
