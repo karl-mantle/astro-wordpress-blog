@@ -8,14 +8,35 @@ const { title, metaDesc } : Partial<YoastSEO> = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html
+  lang="en"
+  x-data="{
+    darkMode: false, 
+    init() {
+      if (localStorage.getItem('darkMode')) {
+        this.darkMode = JSON.parse(localStorage.getItem('darkMode'));
+      }
+      else {
+        this.darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      }
+
+      document.documentElement.classList.toggle('dark', this.darkMode);
+    },
+    toggleDarkMode() {
+      this.darkMode = !this.darkMode;
+      document.documentElement.classList.toggle('dark', this.darkMode);
+      localStorage.setItem('darkMode', JSON.stringify(this.darkMode));
+    }
+  }"
+  x-init="init"
+>
   <head>
     <Metadata title={title} metaDesc={metaDesc} />
   </head>
 
-  <body>
+  <body class="bg-white dark:bg-black">
     <Header />
-    <main class="container">
+    <main class="container prose dark:prose-invert">
       <slot />
     </main>
     <Footer />
