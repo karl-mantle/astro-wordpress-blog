@@ -1,0 +1,86 @@
+---
+import IconBrandFacebook from '../icons/IconBrandFacebook.astro';
+import IconBrandInstagram from '../icons/IconBrandInstagram.astro';
+import IconBrandLinkedIn from '../icons/IconSun.astro';
+import IconBrandMySpace from '../icons/IconSun.astro';
+import IconBrandPinterest from '../icons/IconBrandPinterest.astro';
+import IconBrandTwitter from '../icons/IconBrandX.astro';
+import IconBrandWikipedia from '../icons/IconBrandWikipedia.astro';
+import IconBrandYouTube from '../icons/IconBrandYoutube.astro';
+
+import { getSocialData } from '../../utils/gqlYoastSeo.ts';
+import type { SocialData } from '../../types.ts';
+
+const iconMap = {
+  IconBrandFacebook,
+  IconBrandInstagram,
+  IconBrandLinkedIn,
+  IconBrandMySpace,
+  IconBrandPinterest,
+  IconBrandTwitter,
+  IconBrandWikipedia,
+  IconBrandYouTube
+};
+
+let combinedSocials = [];
+
+const fetchSocialData = async () => {
+  const socialData: SocialData = await getSocialData();
+  const socials = socialData;
+
+  const processSocial = (url: string, platform: string) => {
+    switch (platform) {
+      case 'facebook':
+        return { url, name: 'Facebook', iconName: 'IconBrandFacebook' };
+      case 'instagram':
+        return { url, name: 'Instagram', iconName: 'IconBrandInstagram' };
+      case 'linkedin':
+        return { url, name: 'LinkedIn', iconName: 'IconBrandLinkedIn' };
+      case 'myspace':
+        return { url, name: 'MySpace', iconName: 'IconBrandMySpace' };
+      case 'pinterest':
+        return { url, name: 'Pinterest', iconName: 'IconBrandPinterest' };
+      case 'twitter': // why? because for some reason YoastSEO only returns the username
+        return { url: `https://www.twitter.com/${url}`, name: 'Twitter', iconName: 'IconBrandTwitter' };
+      case 'wikipedia':
+        return { url, name: 'Wikipedia', iconName: 'IconBrandWikipedia' };
+      case 'youtube':
+        return { url, name: 'YouTube', iconName: 'IconBrandYouTube' };
+      default:
+        return null;
+    }
+  };
+
+  Object.entries(socials).forEach(([platform, data]) => {
+    if (data.url || data.username) {
+      const socialData = processSocial(data.url || data.username, platform);
+      if (socialData) combinedSocials.push(socialData);
+    }
+  });
+
+  // I think technically we need premium to add these URLs, but we don't really ;-)
+  socials.otherSocials.forEach(social => {
+    const platform = social.match(/wikipedia|myspace|pinterest|youtube|instagram|linkedin/gi)?.[0];
+    if (platform) {
+      const socialData = processSocial(social, platform.toLowerCase());
+      if (socialData) combinedSocials.push(socialData);
+    }
+  });
+};
+
+await fetchSocialData();
+---
+
+<ul class="inline-flex gap-4 px-5">
+  {combinedSocials.map(social => {
+    const IconComponent = iconMap[social.iconName];
+    return (
+      <li key={social.url} class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+        <a href={social.url} target="_blank" rel="noopener noreferrer">
+          <IconComponent height={24} width={24} />
+          <span class="sr-only">{social.name}</span>
+        </a>
+      </li>
+    );
+  })}
+</ul>
