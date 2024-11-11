@@ -1,17 +1,34 @@
-// getPosts.ts
-export interface UriNode {
+// gqlNavigation.ts
+
+export interface MenuItem { 
+  id: string;
+  parentId: string | null;
   uri: string;
-};
+  label: string;
+  children: MenuItem[];
+}
+
+export interface menuItems {
+  nodes: MenuItem[];
+}
+
+// gqlRoutes.ts
 
 export interface GetAllUrisResponse {
   terms: {
-    nodes: UriNode[];
+    nodes: {
+      uri: string
+    };
   };
   posts: {
-    nodes: UriNode[];
+    nodes: {
+      uri: string
+    };
   };
   pages: {
-    nodes: UriNode[];
+    nodes: {
+      uri: string
+    };
   };
 };
 
@@ -36,6 +53,11 @@ export interface Category {
   uri: string;
 };
 
+export interface Tag {
+  name: string;
+  uri: string;
+};
+
 export interface NodeByUri {
   __typename: string;
   isContentNode: boolean;
@@ -48,32 +70,68 @@ export interface NodeByUri {
   categories?: {
     nodes: Category[];
   };
-  featuredImage?: FeaturedImage;
+  featuredImage?: FeaturedImage | null;
   seo?: YoastSEO;
   posts?: {
     nodes: {
       date: string;
       title: string;
       excerpt: string;
+      dateGmt: string;
       uri: string;
       categories: {
         nodes: Category[];
       };
-      featuredImage: FeaturedImage;
+      tags: {
+        nodes: Tag[];
+      };
+      featuredImage: FeaturedImage | null;
     }[];
   };
   description?: string;
 };
 
-// getMetaData.ts
+// gqlSettings.ts
 
-export interface SchemaData {
+export interface generalSettings {
+  generalSettings: {
+    dateFormat: string;
+    description: string;
+    language: string;
+    timeFormat: string;
+    timezone: string;
+    title: string;
+  };
+}
+
+export interface readingSettings {
+  readingSettings: {
+    showOnFront: 'page' | 'posts';
+    postsPerPage: number;
+    pageOnFront: number;
+    pageForPosts: number;
+  };
+}
+
+// gqlYoastSeo.ts
+
+export interface OpenGraph {
   seo: {
     openGraph: {
       defaultImage: {
         sourceUrl: string;
+        altText: string;
+        mediaDetails: {
+          height: number;
+          width: number;
+        };
       };
     };
+  };
+}
+
+export interface SchemaData {
+  seo: {
     schema: {
       logo: {
         sourceUrl: string;
