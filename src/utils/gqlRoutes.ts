@@ -1,21 +1,21 @@
 import { wpQuery } from './wpQuery';
-import type { GetAllUrisResponse, UriNode } from '../types';
+import type { GetAllUrisResponse } from '../types';
 
 // terms includes tags and categories
 export async function getAllUris(): Promise<{ params: { uri: string } }[]> {
   const res: GetAllUrisResponse = await wpQuery({
     query: `query GetAllUris {
-      terms {
+      terms(where: {childless: false}) {
         nodes {
           uri
         }
       }
-      posts(first: 100) {
+      posts(where: {status: PUBLISH}) {
         nodes {
           uri
         }
       }
-      pages(first: 100) {
+      pages(where: {status: PUBLISH}) {
         nodes {
           uri
         }
@@ -25,11 +25,11 @@ export async function getAllUris(): Promise<{ params: { uri: string } }[]> {
 
   const uris = Object.values(res)
     // combine nodes
-    .reduce((acc, currentValue) => acc.concat(currentValue.nodes), [] as UriNode[])
+    .reduce((acc, currentValue) => acc.concat(currentValue.nodes), [] as { nodes: any[] }[])
     // filter nodes
-    .filter((node: UriNode) => node.uri !== null)
+    .filter((node: {uri: string}) => node.uri !== null)
     // format nodes
-    .map((node: UriNode) => {
+    .map((node: {uri: string}) => {
       let trimmedURI = node.uri.substring(1);
       trimmedURI = trimmedURI.substring(0, trimmedURI.length - 1);
       return { params: { uri: trimmedURI } };

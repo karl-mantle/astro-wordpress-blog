@@ -1,15 +1,47 @@
 import { wpQuery } from './wpQuery';
-import type { SchemaData, SocialData } from '../types';
+import type { OpenGraph, SchemaData, SocialData } from '../types';
 
-export async function getSchemaData(): Promise<SchemaData> {
+export async function getOpenGraph(): Promise<OpenGraph> {
   const res = await wpQuery({
-    query: `query getSchemaData {
+    query: `query getOpenGraph {
       seo {
         openGraph {
           defaultImage {
             sourceUrl
           }
         }
+      }
+    }`
+  });
+
+  return res.seo;
+}
+
+export async function getSiteLogo(): Promise<SchemaData> {
+  const res = await wpQuery({
+    query: `query getSiteLogo {
+      seo {
+        schema {
+          logo {
+            sourceUrl
+            altText
+            mediaDetails {
+              height
+              width
+            }
+          }
+        }
+      }
+    }`
+  });
+
+  return res.seo.schema.logo;
+}
+
+export async function getSchemaData(): Promise<SchemaData> {
+  const res = await wpQuery({
+    query: `query getSchemaData {
+      seo {
         schema {
           logo {
             sourceUrl
