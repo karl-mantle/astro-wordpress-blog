@@ -1,10 +1,10 @@
 ---
 import IconBrandFacebook from '../icons/IconBrandFacebook.astro';
 import IconBrandInstagram from '../icons/IconBrandInstagram.astro';
-import IconBrandLinkedIn from '../icons/IconSun.astro';
-import IconBrandMySpace from '../icons/IconSun.astro';
+import IconBrandLinkedIn from '../icons/IconBrandLinkedIn.astro';
+import IconBrandMyspace from '../icons/IconBrandMyspace.astro';
 import IconBrandPinterest from '../icons/IconBrandPinterest.astro';
-import IconBrandTwitter from '../icons/IconBrandX.astro';
+import IconBrandX from '../icons/IconBrandX.astro';
 import IconBrandWikipedia from '../icons/IconBrandWikipedia.astro';
 import IconBrandYouTube from '../icons/IconBrandYoutube.astro';
 
@@ -15,9 +15,9 @@ const iconMap = {
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandLinkedIn,
-  IconBrandMySpace,
+  IconBrandMyspace,
   IconBrandPinterest,
-  IconBrandTwitter,
+  IconBrandX,
   IconBrandWikipedia,
   IconBrandYouTube
 };
@@ -37,11 +37,11 @@ const fetchSocialData = async () => {
       case 'linkedin':
         return { url, name: 'LinkedIn', iconName: 'IconBrandLinkedIn' };
       case 'myspace':
-        return { url, name: 'MySpace', iconName: 'IconBrandMySpace' };
+        return { url, name: 'Myspace', iconName: 'IconBrandMyspace' };
       case 'pinterest':
         return { url, name: 'Pinterest', iconName: 'IconBrandPinterest' };
       case 'twitter': // why? because for some reason YoastSEO only returns the username
-        return { url: `https://www.twitter.com/${url}`, name: 'Twitter', iconName: 'IconBrandTwitter' };
+        return { url: `https://www.x.com/${url}`, name: 'X', iconName: 'IconBrandX' };
       case 'wikipedia':
         return { url, name: 'Wikipedia', iconName: 'IconBrandWikipedia' };
       case 'youtube':
