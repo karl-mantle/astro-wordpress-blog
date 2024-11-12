@@ -1,0 +1,32 @@
+---
+import PostCard from './cards/PostCard.astro';
+import { getRecentPosts } from '../utils/gqlPosts';
+import { cleanParagraphTags } from '../utils/formatText.ts';
+import type { NodeByUri } from '../types.ts';
+
+const posts = await getRecentPosts(6);
+---
+
+<section class="not-prose flex flex-col py-8">
+
+  <header class="flex mb-8 border-b-2 border-gray-200 dark:border-gray-700">
+    <h2 class="text-3xl mb-4 font-semibold text-gray-700 dark:text-gray-200">Recent Posts</h2>
+    <a href="text-gray-700 dark:text-gray-200 dark:hover:text-white"></a>
+  </header>
+
+  <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:[&>*:first-child]:col-span-2 xl:[&>*:first-child]:row-span-2">
+    {
+      posts.nodes.map((post: NodeByUri['posts'][number]) => (
+        <PostCard
+          featuredImage={post.featuredImage.node.sourceUrl}
+          altText={post.featuredImage.node.altText}
+          title={post.title}
+          dateGmt={post.dateGmt}
+          excerpt={cleanParagraphTags(post.excerpt)}
+          href={post.uri}
+        />
+      ))
+    }
+  </div>
+
+</section>

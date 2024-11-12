@@ -1,0 +1,46 @@
+---
+import { Image } from 'astro:assets'
+import IconArrowRight from '../icons/IconArrowRight.astro';
+import IconArrowRightUp from '../icons/IconArrowRightUp.astro';
+import IconCalendar from '../icons/IconCalendar.astro';
+import { getFormattedDate } from '../../i18n/formatDateTime.ts';
+
+interface Props {
+  featuredImage: string,
+  altText: string,
+  title: string,
+  dateGmt: string,
+  excerpt: string,
+  href: URL,
+};
+
+const { featuredImage, altText, title, dateGmt, excerpt, href }: Partial<Props> = Astro.props;
+
+const formattedDate = await getFormattedDate(dateGmt);
+---
+
+<a href={href} class="h-full flex flex-col hover:shadow-md dark:shadow-gray-900 brightness-90 hover:brightness-100 focus:brightness-100" x-data="{ hovered: false }" @mouseenter="hovered = true" @mouseleave="hovered = false">
+  <Image
+      src={featuredImage}
+      width={800}
+      height={600}
+      format='webp'
+      class='h-full min-w-full object-cover'
+      alt={altText}
+  />
+  <article class="flex flex-col gap-2 p-4">
+    <span class="inline-flex gap-2"><IconCalendar height={16} width={16}/><time datetime={dateGmt}>{formattedDate}</time></span>
+    <h3 class="font-medium text-xl text-gray-700 dark:text-gray-200">{title}</h3>
+    <p class="text-gray-700 dark:text-gray-200">{excerpt}</p>
+
+    <div class="flex gap-2 font-medium text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+      <span class="box-border border-transparent border-b-2 hover:border-black dark:border-white">Read more</span>
+      <template x-if="hovered"> 
+        <IconArrowRightUp height={21} width={21} classes="self-center"/> 
+      </template>
+      <template x-if="!hovered">
+        <IconArrowRight height={21} width={21} classes="self-center"/>
+      </template>
+    </div>
+  </article>
+</a>

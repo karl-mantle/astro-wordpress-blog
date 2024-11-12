@@ -3,7 +3,7 @@ import type { NodeByUri } from '../types';
 
 export async function getRecentPosts(amount: number): Promise<NodeByUri["posts"]> {
   const res = await wpQuery({
-    query: `query getRecentPosts {
+    query: `query getRecentPosts($amount: Int!) {
       posts(first: $amount) {
         nodes {
           uri
