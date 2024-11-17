@@ -34,9 +34,9 @@ const { title, metaDesc } : Partial<YoastSEO> = Astro.props;
     <Metadata title={title} metaDesc={metaDesc} />
   </head>
 
-  <body class="bg-white dark:bg-black">
+  <body class="bg-white dark:bg-black m-auto max-w-7xl">
     <Header />
-    <main class="container prose dark:prose-invert">
+    <main class="prose dark:prose-invert m-auto px-4 max-w-7xl xl:px-0">
       <slot />
     </main>
     <Footer />
