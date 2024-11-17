@@ -1,15 +1,9 @@
-import { wpQuery } from './wpQuery';
-import type { GetAllUrisResponse } from '../types';
+import { wpQuery } from './wpQuery.ts';
+import type { GetAllUrisResponse } from '../types.ts';
 
-// terms includes tags and categories
 export async function getAllUris(): Promise<{ params: { uri: string } }[]> {
   const res: GetAllUrisResponse = await wpQuery({
     query: `query GetAllUris {
-      terms(where: {childless: false}) {
-        nodes {
-          uri
-        }
-      }
       posts(where: {status: PUBLISH}) {
         nodes {
           uri
@@ -37,6 +31,45 @@ export async function getAllUris(): Promise<{ params: { uri: string } }[]> {
 
   return uris;
 }
+
+// not sure which way is better ^ v
+
+export async function getAllTerms(): Promise<{ slug: string, uri: string }[]> {
+  const res = await wpQuery({
+    query: `query GetAllTerms {
+      categories {
+        nodes {
+          slug
+          uri
+        }
+      }
+      tags {
+        nodes {
+          slug
+          uri
+        }
+      }
+    }`
+  });
+
+  const allCategories = res.categories.nodes.map((category: { slug: string, uri: string }) => ({
+    id: category.slug,
+    uri: category.uri,
+    type: 'category'
+  }));
+
+  const allTags = res.tags.nodes.map((tag: { slug: string, uri: string }) => ({
+    id: tag.slug,
+    uri: tag.uri,
+    type: 'tag'
+  }));
+
+  const allTerms = [...allCategories, ...allTags];
+
+  return allTerms;
+}
+
+// get node data
 
 export async function getNodeByURI(uri: string) {
   const res = await wpQuery({
