@@ -3,6 +3,7 @@ import IconChevronDown from '../icons/IconChevronDown.astro';
 import IconChevronUp from '../icons/IconChevronUp.astro';
 import { getNavigation } from '../../utils/gqlNavigation.ts';
 import type { MenuItem } from '../../types.ts';
+import IconArrowRight from '../icons/IconArrowRight.astro';
 
 const menuData = await getNavigation();
 
@@ -26,31 +27,31 @@ function createMenuTree(menuItems: MenuItem[]): MenuItem[] {
 const menuTree = createMenuTree(menuData.nodes);
 ---
 
-<nav class="relative flex justify-end">
-  <ul class="menu inline-flex gap-5 px-5">
+<nav :class="{ 'hidden md:block': !isMenuOpen }" class="relative w-screen md:w-full md:flex md:justify-end" >
+  <ul class="absolute top-full md:top-auto left-0 md:left-auto z-20 h-[calc(100vh-90px)] w-full md:h-auto md:relative md:inline-flex md:gap-5 md:px-5 bg-white dark:bg-black md:bg-transparent md:dark:bg-transparent">
 
     {menuTree.map((item: MenuItem) => (
       <li
         key={item.id}
-        class="relative flex flex-col gap-2"
+        class="relative flex flex-col md:gap-2"
         x-data="{ open: false }"
         @keydown.window.escape="open = false"
       >
 
-        <div class="flex flex-row items-center text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white border-b-2 border-gray-200 hover:border-black dark:border-gray-700 dark:hover:border-white">
-          <a href={item.uri} class="flex p-2 font-medium">{item.label}</a>
+        <div class="flex flex-row justify-between px-4 py-2 md:p-0 text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white border-b-2 border-gray-200 hover:border-black dark:border-gray-700 dark:hover:border-white">
+          <a href={item.uri} class="flex p-2 text-lg md:text-base font-semibold">{item.label}</a>
 
           {item.children.length > 0 && (
             <button
-              class="flex items-center justify-center pr-2"
+              class="flex items-center justify-center md:pr-2"
               @click="open = !open"
               @keydown.window.escape="open = false"
             >
               <template x-if="!open">
-                <IconChevronDown height={16} width={16} />
+                <IconChevronDown height={32} width={32} classes="max-h-10 md:max-h-4"/>
               </template>
               <template x-if="open">
-                <IconChevronUp height={16} width={16} />
+                <IconChevronUp height={32} width={32} classes="max-h-10 md:max-h-4" />
               </template>
               <span class="sr-only">{item.label}</span>
             </button>
@@ -59,15 +60,16 @@ const menuTree = createMenuTree(menuData.nodes);
 
         {item.children.length > 0 && (
           <ul
-            class="absolute left-0 top-full z-10 flex flex-col w-full bg-white dark:bg-black shadow-sm dark:shadow-gray-800"
+            class="md:absolute md:left-0 md:top-full z-25 flex flex-col w-full bg-gray-200 dark:bg-gray-700 md:bg-white dark:md:bg-black md:shadow-xl dark:shadow-gray-900"
             x-show="open"
             @click.away="open = false"
           >
             {item.children.map((child: MenuItem) => (
-              <li key={child.id} class="border-b-2 border-gray-200 hover:border-black dark:border-gray-700 dark:hover:border-white">
-                <a href={child.uri} class="block p-2 font-medium text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+              <li key={child.id} class="flex justify-between items-center px-4 py-2 text-lg md:text-base text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white md:p-0 border-b-2 border-white dark:border-black md:border-gray-200 md:hover:border-black dark:md:border-gray-700 dark:md:hover:border-white">
+                <a href={child.uri} class="block p-2 font-medium ">
                   {child.label}
                 </a>
+                <IconArrowRight height={32} width={32} classes="max-h-10 md:hidden" />
               </li>
             ))}
 

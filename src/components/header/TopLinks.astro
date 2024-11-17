@@ -5,32 +5,35 @@ import IconBrandGithub from '../icons/IconBrandGithub.astro';
 import IconRss from '../icons/IconRss.astro';
 import IconMoon from '../icons/IconMoon.astro';
 import IconSun from '../icons/IconSun.astro';
+import IconMenu2 from '../icons/IconMenu2.astro'
+import IconX from '../icons/IconX.astro'
 
-const iconHeight = 28;
-const iconWidth = 28;
+const iconHeight = 64;
+const iconWidth = 64;
+const iconClasses = 'max-h-8 sm:max-h-10 md:max-h-8';
 ---
-<ul class="inline-flex gap-4 justify-end items-center px-5 leading-none">
+<ul class="flex gap-4 justify-end items-center px-5 my-auto md:my-0 pb-2 md:pb-0 leading-none ">
 
   <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white md:border-r-2 border-gray-200 dark:border-gray-700">
     <button
       class="inline-flex gap-1 md:pr-4"
-      x-on:click="window.open('/blog/tags/', '_self')"
+      x-on:click="window.open('/blog/tag/', '_self')"
     >
-      <IconTags height={iconHeight} width={iconWidth}/>
+      <IconTags height={iconHeight} width={iconWidth} classes={iconClasses}/>
       <span class="sr-only md:not-sr-only md:self-center md:font-semibold">Tags</span>
     </button>
   </li>
 
   <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
     <button class="m-auto">
-      <IconSearch height={iconHeight} width={iconWidth}/>
+      <IconSearch height={iconHeight} width={iconWidth} classes={iconClasses}/>
       <span class="sr-only">Search blog</span>
     </button>
   </li>
 
   <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
     <button>
-      <IconRss height={iconHeight} width={iconWidth}/>
+      <IconRss height={iconHeight} width={iconWidth} classes={iconClasses}/>
       <span class="sr-only">Subscribe to RSS feed</span>
     </button>
   </li>
@@ -39,16 +42,32 @@ const iconWidth = 28;
     <button
       x-on:click="window.open('https://github.com/karl-mantle/astro-wordpress-blog/', '_blank', 'noopener,noreferrer')"
     >
-      <IconBrandGithub height={iconHeight} width={iconWidth}/>
+      <IconBrandGithub height={iconHeight} width={iconWidth} classes={iconClasses}/>
       <span class="sr-only">Visit the GitHub repository</span>
     </button>
   </li>
 
   <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
     <button @click="toggleDarkMode">
-      <IconSun height={iconHeight} width={iconWidth} classes="hidden dark:block"/>
-      <IconMoon height={iconHeight} width={iconWidth} classes="dark:hidden"/>
+      <IconSun height={iconHeight} width={iconWidth} classes=`${iconClasses} hidden dark:block`/>
+      <IconMoon height={iconHeight} width={iconWidth} classes=`${iconClasses} dark:hidden`/>
       <span class="sr-only">Toggle dark mode</span>
+    </button>
+  </li>
+
+  <li class="md:hidden text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+    <button
+      @click="isMenuOpen = !isMenuOpen" 
+      @keydown.window.escape="isMenuOpen = false"
+    >
+      <div x-show="!isMenuOpen">
+        <IconMenu2 height={iconHeight} width={iconWidth} classes=`${iconClasses}`/>
+        <span class="sr-only">Open menu</span>
+      </div>
+      <div x-show="isMenuOpen">
+        <IconX height={iconHeight} width={iconWidth} classes=`${iconClasses}`/>
+        <span class="sr-only">Close menu</span>
+      </div>
     </button>
   </li>
 </ul>
