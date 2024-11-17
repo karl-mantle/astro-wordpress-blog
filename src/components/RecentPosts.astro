@@ -1,10 +1,59 @@
 ---
 import PostCard from './cards/PostCard.astro';
-import { getRecentPosts } from '../utils/gqlPosts';
-import { cleanParagraphTags } from '../utils/formatText.ts';
+import { getPostsByMostRecent } from '../utils/gqlPosts.ts';
+import { getOpenGraph } from '../utils/gqlYoastSeo.ts';
 import type { NodeByUri } from '../types.ts';
 
-const posts = await getRecentPosts(6);
+interface Props {
+  orientation: 'row' | 'column';
+  quantity: number;
+  filteredBy: 'recent' | 'category' | 'tag'
+  featuredPost?: boolean;
+}
+
+const { orientation = 'row', quantity = 3, filteredBy = 'recent', featuredPost = false }: Props = Astro.props;
+
+// fallback image for if post has no featured image
+const openGraphData = await getOpenGraph();
+const defaultImage = openGraphData.openGraph.defaultImage.sourceUrl;
+
+let orientationClasses = '';
+let getFilteredPosts = '';
+let featuredPostClasses = '';
+
+switch (orientation) {
+  case 'row':
+    orientationClasses = 'grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3';
+    break;
+  case 'column':
+    orientationClasses = 'grid gap-8 grid-cols-1';
+    break;
+  default:
+    orientationClasses = 'grid gap-8 grid-cols-1';
+    break;
+}
+
+switch (filteredBy) {
+  case 'recent':
+    getFilteredPosts = await getPostsByMostRecent(quantity);
+    break;
+  // to do
+  case 'category':
+    getFilteredPosts = await getRecentPosts(quantity);
+  break;
+    case 'tag':
+    getFilteredPosts = await getRecentPosts(quantity);
+    break;
+  default:
+    orientationClasses = 'grid gap-8 grid-cols-1';
+    break;
+}
+
+if (featuredPost === true) {
+  featuredPostClasses = ' xl:[&>a:first-child>img]:max-h-none xl:[&>*:first-child]:col-span-2 xl:[&>*:first-child]:row-span-2';
+}
+
+const posts = getFilteredPosts;
 ---
 
 <section class="not-prose flex flex-col py-8">
@@ -14,18 +63,23 @@ const posts = await getRecentPosts(6);
     <a href="text-gray-700 dark:text-gray-200 dark:hover:text-white"></a>
   </header>
 
-  <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:[&>*:first-child]:col-span-2 xl:[&>*:first-child]:row-span-2">
+  <div class={`${orientationClasses}${featuredPostClasses}`}>
     {
-      posts.nodes.map((post: NodeByUri['posts'][number]) => (
-        <PostCard
-          featuredImage={post.featuredImage.node.sourceUrl}
-          altText={post.featuredImage.node.altText}
-          title={post.title}
-          dateGmt={post.dateGmt}
-          excerpt={cleanParagraphTags(post.excerpt)}
-          href={post.uri}
-        />
-      ))
+      posts.map((post) => {
+        const featuredImageUrl = post.featuredImage?.node.sourceUrl || defaultImage;
+        const altText = post.featuredImage?.node.altText || 'placeholder image';
+
+        return (
+          <PostCard
+            featuredImage={featuredImageUrl}
+            altText={altText}
+            title={post.title}
+            dateGmt={post.dateGmt}
+            excerpt={post.excerpt.replace(/<(.|\n)*?>/g, '')}
+            href={post.uri}
+          />
+        );
+      })
     }
   </div>
 

@@ -7,6 +7,11 @@ import RecentPosts from '../components/RecentPosts.astro';
 <!-- need to find a better way of setting title & meta desc -->
 <Layout title={SITE_TITLE} description={SITE_DESCRIPTION}>
 
-  <RecentPosts/>
+  <RecentPosts
+    orientation='row'
+    quantity={6}
+    filteredBy='recent'
+    featuredPost={true}
+  />
 
 </Layout>
