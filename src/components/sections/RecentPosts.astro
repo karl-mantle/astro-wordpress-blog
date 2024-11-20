@@ -1,0 +1,111 @@
+---
+import type { NodeByUri } from '../../types.ts';
+import { getPostsByMostRecent } from '../../utils/gqlPosts.ts';
+import { getOpenGraph } from '../../utils/gqlYoastSeo.ts';
+import PostCard from '../cards/PostCard.astro';
+import IconArrowRight from '../icons/IconArrowRight.astro';
+import IconArrowRightUp from '../icons/IconArrowRightUp.astro';
+
+interface Props {
+  orientation: 'row' | 'column';
+  quantity: number;
+  filteredBy: 'recent' | 'category' | 'tag'
+  featuredPost?: boolean;
+  showViewAll?: boolean;
+}
+
+const { orientation = 'row', quantity = 3, filteredBy = 'recent', featuredPost = false, showViewAll = false }: Props = Astro.props;
+
+// fallback image for if post has no featured image
+const openGraphData = await getOpenGraph();
+const defaultImage = openGraphData.openGraph.defaultImage.sourceUrl;
+
+let orientationClasses = '';
+let getFilteredPosts = '';
+let featuredPostClasses = '';
+let hiddenStatus = 'hidden ';
+
+switch (orientation) {
+  case 'row':
+    orientationClasses = 'grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3';
+    break;
+  case 'column':
+    orientationClasses = 'grid gap-8 grid-cols-1';
+    break;
+  default:
+    orientationClasses = 'grid gap-8 grid-cols-1';
+    break;
+}
+
+switch (filteredBy) {
+  case 'recent':
+    getFilteredPosts = await getPostsByMostRecent(quantity);
+    break;
+  // to do
+  case 'category':
+    getFilteredPosts = await getRecentPosts(quantity);
+  break;
+    case 'tag':
+    getFilteredPosts = await getRecentPosts(quantity);
+    break;
+  default:
+    orientationClasses = 'grid gap-8 grid-cols-1';
+    break;
+}
+
+if (featuredPost === true) {
+  featuredPostClasses = ' xl:[&>li:first-child>img]:max-h-none xl:[&>*:first-child]:col-span-2 xl:[&>*:first-child]:row-span-2';
+}
+
+if (showViewAll === true) {
+  hiddenStatus = '';
+}
+
+const posts = getFilteredPosts;
+---
+
+<section class="not-prose flex flex-col py-8">
+
+  <header class="relative flex flex-col md:flex-row justify-between mb-4 md:mb-8 md:pr-5">
+    <h2 class="p-2 md:p-0 md:mb-4 font-semibold text-3xl text-gray-700 dark:text-gray-200 border-b-2 border-gray-200 dark:border-gray-700 md:border-transparent md:dark:border-transparent">Recent Posts</h2>
+    <a
+      class={`${hiddenStatus}flex flex-row justify-between items-center md:pb-2 text-gray-700 dark:text-gray-200 border-b-2 border-transparent hover:border-black dark:hover:border-white`}
+      href={`${Astro.site}/blog/`.replace(/([^:]\/)\/+/g, "$1")}
+      x-data="{ hovered: false }"
+      @mouseenter="hovered = true"
+      @mouseleave="hovered = false"
+    >
+      <span class="flex p-2 text-lg md:text-base font-semibold" aria-hidden="false">View all posts</span>
+      <template x-if="hovered">
+        <IconArrowRightUp height={21} width={21} classes="self-center pr-4 md:p-0" />
+      </template>
+      <template x-if="!hovered">
+        <IconArrowRight height={21} width={21} classes="self-center pr-4 md:p-0" />
+      </template>
+    </a>
+
+    <div class="absolute bottom-0 -z-40 block w-full border-b-2 border-gray-200 dark:border-gray-700" aria-hidden="true"></div>
+  </header>
+
+
+  <ul class={`${orientationClasses}${featuredPostClasses}`} role="presentation">
+    {
+      posts.map((post) => {
+        const featuredImageUrl = post.featuredImage?.node.sourceUrl || defaultImage;
+        const altText = post.featuredImage?.node.altText || 'placeholder image';
+
+        return (
+          <PostCard
+            featuredImage={featuredImageUrl}
+            altText={altText}
+            title={post.title}
+            dateGmt={post.dateGmt}
+            excerpt={post.excerpt.replace(/<(.|\n)*?>/g, '')}
+            href={post.uri}
+          />
+        );
+      })
+    }
+  </ul>
+
+</section>

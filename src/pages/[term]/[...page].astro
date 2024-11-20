@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PostCard from '../../components/cards/PostCard.astro';
-import Pagination from '../../components/Pagination.astro';
+import Pagination from '../../components/ui/Pagination.astro';
 import { getOpenGraph } from '../../utils/gqlYoastSeo.ts';
 import { getPostsByCategory, getPostsByTag } from '../../utils/gqlPosts';
 import { getAllTerms, getNodeByURI } from '../../utils/gqlRoutes';
@@ -58,7 +58,7 @@ const params = Astro.params;
       <p class="mb-2">Now showing {page.start + 1} to {page.end + 1} of all posts tagged with {node.name} out of {page.total} posts.</p>
     </header>
 
-    <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+    <ul class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
 
       {page.data.map(({ title, excerpt, uri, dateGmt, featuredImage }) => (
         <PostCard
@@ -70,7 +70,7 @@ const params = Astro.params;
           href={`${Astro.site}${uri}`.replace(/([^:]\/)\/+/g, "$1")}
         />
       ))}
-    </div>
+    </ul>
 
     <Pagination
       page={page}

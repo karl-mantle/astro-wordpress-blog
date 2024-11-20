@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts.ts';
-import RecentPosts from '../components/RecentPosts.astro';
+import RecentPosts from '../components/sections/RecentPosts.astro';
 ---
 
 <!-- need to find a better way of setting title & meta desc -->
@@ -12,6 +12,7 @@ import RecentPosts from '../components/RecentPosts.astro';
     quantity={6}
     filteredBy='recent'
     featuredPost={true}
+    showViewAll={true}
   />
 
 </Layout>
