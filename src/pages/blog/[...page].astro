@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import PostCard from '../../components/cards/PostCard.astro';
-import Pagination from '../../components/Pagination.astro';
+import Pagination from '../../components/ui/Pagination.astro';
 import { getOpenGraph } from '../../utils/gqlYoastSeo.ts';
 import { getPostsByMostRecent } from '../../utils/gqlPosts';
 import { getNodeByURI } from '../../utils/gqlRoutes';
@@ -34,7 +34,6 @@ const { page } = Astro.props;
     </header>
 
     <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-
       {page.data.map(({ title, excerpt, uri, dateGmt, featuredImage }) => (
         <PostCard
           featuredImage={featuredImage?.node.sourceUrl || defaultImage}

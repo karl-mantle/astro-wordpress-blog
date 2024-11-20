@@ -22,7 +22,7 @@ export async function getStaticPaths({ paginate }) {
 
     let posts;
     switch (nodeData.__typename) {
-        case 'Category':
+      case 'Category':
         posts = await getPostsByCategory(slug);
         break;
       case 'Tag':
@@ -53,13 +53,13 @@ const params = Astro.params;
 <Layout title={node.seo?.title || node.title} metaDesc={node.seo?.metaDesc}>
 
   <section class="not-prose flex flex-col py-8">
+
     <header class="flex flex-col mb-8 border-b-2 border-gray-200 dark:border-gray-700">
       <h2 class="text-3xl mb-2 font-semibold text-gray-700 dark:text-gray-200">{node.__typename}: {node.name}</h2>
       <p class="mb-2">Now showing {page.start + 1} to {page.end + 1} of all posts tagged with {node.name} out of {page.total} posts.</p>
     </header>
 
     <ul class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-
       {page.data.map(({ title, excerpt, uri, dateGmt, featuredImage }) => (
         <PostCard
           featuredImage={featuredImage?.node.sourceUrl || defaultImage}

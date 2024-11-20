@@ -15,11 +15,6 @@ export interface menuItems {
 // gqlRoutes.ts
 
 export interface GetAllUrisResponse {
-  terms: {
-    nodes: {
-      uri: string
-    };
-  };
   posts: {
     nodes: {
       uri: string
@@ -94,14 +89,12 @@ export interface NodeByUri {
 // gqlSettings.ts
 
 export interface generalSettings {
-  generalSettings: {
-    dateFormat: string;
-    description: string;
-    language: string;
-    timeFormat: string;
-    timezone: string;
-    title: string;
-  };
+  dateFormat: string;
+  description: string;
+  language: string;
+  timeFormat: string;
+  timezone: string;
+  title: string;
 }
 
 export interface readingSettings {
