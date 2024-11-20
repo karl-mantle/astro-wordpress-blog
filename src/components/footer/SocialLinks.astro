@@ -1,4 +1,6 @@
 ---
+import type { SocialData } from '../../types.ts';
+import { getSocialData } from '../../utils/gqlYoastSeo.ts';
 import IconBrandFacebook from '../icons/IconBrandFacebook.astro';
 import IconBrandInstagram from '../icons/IconBrandInstagram.astro';
 import IconBrandLinkedIn from '../icons/IconBrandLinkedIn.astro';
@@ -7,9 +9,6 @@ import IconBrandPinterest from '../icons/IconBrandPinterest.astro';
 import IconBrandX from '../icons/IconBrandX.astro';
 import IconBrandWikipedia from '../icons/IconBrandWikipedia.astro';
 import IconBrandYouTube from '../icons/IconBrandYoutube.astro';
-
-import { getSocialData } from '../../utils/gqlYoastSeo.ts';
-import type { SocialData } from '../../types.ts';
 
 const iconMap = {
   IconBrandFacebook,
@@ -71,14 +70,13 @@ const fetchSocialData = async () => {
 await fetchSocialData();
 ---
 
-<ul class="inline-flex gap-4 px-5">
+<ul class="inline-flex gap-4 px-5" aria-label="social media links">
   {combinedSocials.map(social => {
     const IconComponent = iconMap[social.iconName];
     return (
       <li key={social.url} class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
-        <a href={social.url} target="_blank" rel="noopener noreferrer">
+        <a href={social.url} target="_blank" rel="noopener noreferrer" aria-label={`opens ${social.name} link in a new tab`}>
           <IconComponent height={24} width={24} />
-          <span class="sr-only">{social.name}</span>
         </a>
       </li>
     );

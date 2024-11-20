@@ -6,8 +6,7 @@ import TopLinks from './TopLinks.astro';
 
 <header class="flex justify-end min-h-20 sm:min-h-28 md:justify-between pl-2 pt-2 md:pl-4 md:pt-4">
     <Logo />
-
-    <div x-data="{ isMenuOpen: false }" class="flex flex-col justify-between">
+    <div class="flex flex-col justify-between" x-data="{ siteNavigationOpen: false }">
       <TopLinks />
       <Navigation />
     </div>

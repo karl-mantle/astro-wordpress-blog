@@ -12,61 +12,66 @@ const iconHeight = 64;
 const iconWidth = 64;
 const iconClasses = 'max-h-8 sm:max-h-10 md:max-h-8';
 ---
-<ul class="flex gap-4 justify-end items-center px-5 my-auto md:my-0 pb-2 md:pb-0 leading-none ">
+<ul class="flex gap-4 justify-end items-center px-5 my-auto md:my-0 pb-2 md:pb-0 leading-none" role="toolbar" aria-label="toolbar">
 
   <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white md:border-r-2 border-gray-200 dark:border-gray-700">
     <button
       class="inline-flex gap-1 md:pr-4"
+      aria-label="open tags archive page"
       x-on:click="window.open('/blog/tag/', '_self')"
     >
       <IconTags height={iconHeight} width={iconWidth} classes={iconClasses}/>
-      <span class="sr-only md:not-sr-only md:self-center md:font-semibold">Tags</span>
-    </button>
-  </li>
-
-  <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
-    <button class="m-auto">
-      <IconSearch height={iconHeight} width={iconWidth} classes={iconClasses}/>
-      <span class="sr-only">Search blog</span>
-    </button>
-  </li>
-
-  <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
-    <button>
-      <IconRss height={iconHeight} width={iconWidth} classes={iconClasses}/>
-      <span class="sr-only">Subscribe to RSS feed</span>
+      <span class="hidden md:inline-block md:self-center md:font-semibold" aria-hidden="true">Tags</span>
     </button>
   </li>
 
   <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
     <button
-      x-on:click="window.open('https://github.com/karl-mantle/astro-wordpress-blog/', '_blank', 'noopener,noreferrer')"
+      class="m-auto"
+      aria-label="open search"
     >
-      <IconBrandGithub height={iconHeight} width={iconWidth} classes={iconClasses}/>
-      <span class="sr-only">Visit the GitHub repository</span>
+      <IconSearch height={iconHeight} width={iconWidth} classes={iconClasses}/>
     </button>
   </li>
 
   <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
-    <button @click="toggleDarkMode">
+    <button aria-label="subscribe to RSS feed">
+      <IconRss height={iconHeight} width={iconWidth} classes={iconClasses}/>
+    </button>
+  </li>
+
+  <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+    <button
+      aria-label="open GitHub repository in new tab"
+      x-on:click="window.open('https://github.com/karl-mantle/astro-wordpress-blog/', '_blank', 'noopener,noreferrer')"
+    >
+      <IconBrandGithub height={iconHeight} width={iconWidth} classes={iconClasses}/>
+    </button>
+  </li>
+
+  <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+    <button 
+      aria-label="toggle dark mode"
+      :aria-pressed="darkMode"
+      @click="toggleDarkMode"
+    >
       <IconSun height={iconHeight} width={iconWidth} classes=`${iconClasses} hidden dark:block`/>
       <IconMoon height={iconHeight} width={iconWidth} classes=`${iconClasses} dark:hidden`/>
-      <span class="sr-only">Toggle dark mode</span>
     </button>
   </li>
 
   <li class="md:hidden text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
     <button
-      @click="isMenuOpen = !isMenuOpen" 
-      @keydown.window.escape="isMenuOpen = false"
+      aria-label="toggle site navigation"
+      :aria-pressed="siteNavigationOpen"
+      @click="siteNavigationOpen = !siteNavigationOpen" 
+      @keydown.window.escape="siteNavigationOpen = false"
     >
-      <div x-show="!isMenuOpen">
+      <div x-show="!siteNavigationOpen">
         <IconMenu2 height={iconHeight} width={iconWidth} classes=`${iconClasses}`/>
-        <span class="sr-only">Open menu</span>
       </div>
-      <div x-show="isMenuOpen">
+      <div x-show="siteNavigationOpen">
         <IconX height={iconHeight} width={iconWidth} classes=`${iconClasses}`/>
-        <span class="sr-only">Close menu</span>
       </div>
     </button>
   </li>
