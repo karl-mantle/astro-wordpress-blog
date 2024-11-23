@@ -1,28 +1,29 @@
 ---
+import type { ArchiveType, NodeByUri } from '../../types.ts';
+import { getNodeByURI } from '../../utils/gqlRoutes';
+import { getPostsByMostRecent } from '../../utils/gqlPosts';
+import { getOpenGraph } from '../../utils/gqlYoastSeo.ts';
 import Layout from '../../layouts/Layout.astro';
 import PostCard from '../../components/cards/PostCard.astro';
 import Pagination from '../../components/ui/Pagination.astro';
-import { getOpenGraph } from '../../utils/gqlYoastSeo.ts';
-import { getPostsByMostRecent } from '../../utils/gqlPosts';
-import { getNodeByURI } from '../../utils/gqlRoutes';
 
 // fix this part, get from whatever is set as post page
-const uri = `/${Astro.params.uri}/`;
+const uri = `/${(Astro.params as { uri: string }).uri}/`;
 const data = await getNodeByURI(uri);
 const node: NodeByUri = data.nodeByUri;
 
 // fallback image for if post has no featured image
 const openGraphData = await getOpenGraph();
-const defaultImage = openGraphData.openGraph.defaultImage.sourceUrl;
+const defaultImage = openGraphData.sourceUrl;
 
-export async function getStaticPaths({ paginate }) {
+export async function getStaticPaths({ paginate }: { paginate: Function }) {
   const amount = 500;
   const posts = await getPostsByMostRecent(amount);
 
   return paginate(posts, { pageSize: 9 });
 }
 
-const { page } = Astro.props;
+const { page }: { page: ArchiveType } = Astro.props;
 ---
 
 <Layout title={node?.seo?.title || node?.title } metaDesc={node?.seo?.metaDesc}>

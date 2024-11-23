@@ -1,7 +1,7 @@
 import { wpQuery } from './wpQuery';
-import type { OpenGraph, SchemaData, SiteLogo, SocialData } from '../types';
+import type { OpenGraphType, SchemaType, SiteLogoType, SocialLinkType } from '../types';
 
-export async function getOpenGraph(): Promise<OpenGraph> {
+export async function getOpenGraph(): Promise<OpenGraphType> {
   const res = await wpQuery({
     query: `query getOpenGraph {
       seo {
@@ -14,10 +14,10 @@ export async function getOpenGraph(): Promise<OpenGraph> {
     }`
   });
 
-  return res.seo;
+  return res.seo.openGraph.defaultImage;
 }
 
-export async function getSiteLogo(): Promise<SiteLogo> {
+export async function getSiteLogo(): Promise<SiteLogoType> {
   const res = await wpQuery({
     query: `query getSiteLogo {
       seo {
@@ -38,7 +38,7 @@ export async function getSiteLogo(): Promise<SiteLogo> {
   return res.seo.schema.logo;
 }
 
-export async function getSchemaData(): Promise<SchemaData> {
+export async function getSchemaData(): Promise<SchemaType> {
   const res = await wpQuery({
     query: `query getSchemaData {
       seo {
@@ -58,7 +58,7 @@ export async function getSchemaData(): Promise<SchemaData> {
   return res.seo;
 }
 
-export async function getSocialData(): Promise<SocialData> {
+export async function getSocialData(): Promise<SocialLinkType> {
   const res = await wpQuery({
     query: `query getSocialData {
       seo {

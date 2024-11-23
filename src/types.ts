@@ -1,15 +1,15 @@
 // gqlNavigation.ts
 
-export interface MenuItem { 
+export interface MenuItemType { 
   id: string;
   parentId: string | null;
   uri: string;
   label: string;
-  children: MenuItem[];
+  children: MenuItemType[];
 }
 
-export interface menuItems {
-  nodes: MenuItem[];
+export interface menuItemsType {
+  nodes: MenuItemType[];
 }
 
 // gqlRoutes.ts
@@ -58,15 +58,18 @@ export interface NodeByUri {
   isContentNode: boolean;
   isTermNode: boolean;
   title?: string;
+  name?: string;
   uri?: string;
   date?: string;
   content?: string;
   excerpt?: string;
+  description?: string;
   categories?: {
     nodes: Category[];
   };
   featuredImage?: FeaturedImage | null;
   seo?: YoastSEO;
+  nodeByUri: NodeByUri;
   posts?: {
     nodes: {
       date: string;
@@ -83,12 +86,11 @@ export interface NodeByUri {
       featuredImage: FeaturedImage | null;
     }[];
   };
-  description?: string;
 };
 
 // gqlSettings.ts
 
-export interface generalSettings {
+export interface generalSettingsType {
   dateFormat: string;
   description: string;
   language: string;
@@ -97,7 +99,7 @@ export interface generalSettings {
   title: string;
 }
 
-export interface readingSettings {
+export interface readingSettingsType {
   readingSettings: {
     showOnFront: 'page' | 'posts';
     postsPerPage: number;
@@ -108,22 +110,7 @@ export interface readingSettings {
 
 // gqlYoastSeo.ts
 
-export interface OpenGraph {
-  seo: {
-    openGraph: {
-      defaultImage: {
-        sourceUrl: string;
-        altText: string;
-        mediaDetails: {
-          height: number;
-          width: number;
-        };
-      };
-    };
-  };
-}
-
-export interface SiteLogo {
+export interface OpenGraphType {
   sourceUrl: string;
   altText: string;
   mediaDetails: {
@@ -132,10 +119,19 @@ export interface SiteLogo {
   };
 }
 
-export interface SchemaData {
+export interface SiteLogoType {
+  sourceUrl: string;
+  altText: string;
+  mediaDetails: {
+    height: number;
+    width: number;
+  };
+}
+
+export interface SchemaType {
   seo: {
     schema: {
-      logo: SiteLogo;
+      logo: SiteLogoType;
       companyName: string;
       siteName: string;
       personName: string;
@@ -144,7 +140,7 @@ export interface SchemaData {
   };
 };
 
-export interface SocialData {
+export interface SocialLinkType {
   facebook: {
     url: URL;
   };
@@ -169,4 +165,27 @@ export interface SocialData {
   youTube: {
     url: URL;
   };
+  otherSocials: string[];
 };
+
+// post archive
+
+export interface PostCardType {
+  title: string;
+  excerpt: string;
+  uri: string;
+  dateGmt: string;
+  featuredImage?: {
+    node: {
+      sourceUrl: string;
+      altText: string;
+    };
+  } | null;
+}
+
+export interface ArchiveType {
+  start: number;
+  end: number;
+  total: number;
+  data: PostCardType[];
+}

@@ -1,5 +1,5 @@
 ---
-import type { NodeByUri } from '../../types.ts';
+import type { PostCardType } from '../../types.ts';
 import { getPostsByMostRecent } from '../../utils/gqlPosts.ts';
 import { getOpenGraph } from '../../utils/gqlYoastSeo.ts';
 import PostCard from '../cards/PostCard.astro';
@@ -18,12 +18,22 @@ const { orientation = 'row', quantity = 3, filteredBy = 'recent', featuredPost =
 
 // fallback image for if post has no featured image
 const openGraphData = await getOpenGraph();
-const defaultImage = openGraphData.openGraph.defaultImage.sourceUrl;
+const defaultImage = openGraphData.sourceUrl;
 
 let orientationClasses = '';
-let getFilteredPosts = '';
-let featuredPostClasses = '';
-let hiddenStatus = 'hidden ';
+let getFilteredPosts: PostCardType[] = [];
+let featuredPostClasses: string = '';
+let hiddenStatus: string = 'hidden ';
+
+const mapPosts = (posts: any): PostCardType[] => {
+  return posts.map((post: any) => ({ 
+    title: post.title,
+    excerpt: post.excerpt,
+    uri: post.uri,
+    dateGmt: post.dateGmt,
+    featuredImage: post.featuredImage 
+  }));
+};
 
 switch (orientation) {
   case 'row':
@@ -39,14 +49,14 @@ switch (orientation) {
 
 switch (filteredBy) {
   case 'recent':
-    getFilteredPosts = await getPostsByMostRecent(quantity);
+    getFilteredPosts = mapPosts(await getPostsByMostRecent(quantity));
     break;
   // to do
   case 'category':
-    getFilteredPosts = await getRecentPosts(quantity);
+    getFilteredPosts = mapPosts(await getPostsByMostRecent(quantity));
   break;
     case 'tag':
-    getFilteredPosts = await getRecentPosts(quantity);
+    getFilteredPosts = mapPosts(await getPostsByMostRecent(quantity));
     break;
   default:
     orientationClasses = 'grid gap-8 grid-cols-1';
@@ -61,7 +71,7 @@ if (showViewAll === true) {
   hiddenStatus = '';
 }
 
-const posts = getFilteredPosts;
+const posts: PostCardType[] = getFilteredPosts;
 ---
 
 <section class="not-prose flex flex-col py-8">

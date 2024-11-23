@@ -1,9 +1,9 @@
 import { wpQuery } from './wpQuery';
-import type { generalSettings, readingSettings } from '../types';
+import type { generalSettingsType, readingSettingsType } from '../types';
 
 // general settings
 
-export async function getDateTimeFormat(): Promise<generalSettings> {
+export async function getDateTimeFormat(): Promise<generalSettingsType> {
   const res = await wpQuery({
     query: `query getDateTimeFormat {
       generalSettings {
@@ -16,7 +16,7 @@ export async function getDateTimeFormat(): Promise<generalSettings> {
   return res.generalSettings;
 }
 
-export async function getDescription(): Promise<generalSettings> {
+export async function getDescription(): Promise<generalSettingsType> {
   const res = await wpQuery({
     query: `query getDescription {
       generalSettings {
@@ -28,7 +28,7 @@ export async function getDescription(): Promise<generalSettings> {
   return res.generalSettings;
 }
 
-export async function getLanguage(): Promise<generalSettings> {
+export async function getLanguage(): Promise<generalSettingsType> {
   const res = await wpQuery({
     query: `query getLanguage {
       generalSettings {
@@ -40,7 +40,7 @@ export async function getLanguage(): Promise<generalSettings> {
   return res.generalSettings;
 }
 
-export async function getTimeZone(): Promise<generalSettings> {
+export async function getTimeZone(): Promise<generalSettingsType> {
   const res = await wpQuery({
     query: `query getTimeZone {
       generalSettings {
@@ -52,7 +52,7 @@ export async function getTimeZone(): Promise<generalSettings> {
   return res.generalSettings;
 }
 
-export async function getSiteTitle(): Promise<generalSettings> {
+export async function getSiteTitle(): Promise<generalSettingsType> {
   const res = await wpQuery({
     query: `query getSiteTitle {
       generalSettings {
@@ -66,7 +66,7 @@ export async function getSiteTitle(): Promise<generalSettings> {
 
 // reading settings
 
-export async function getFrontPageStatus(): Promise<readingSettings> {
+export async function getFrontPageStatus(): Promise<readingSettingsType> {
   const res = await wpQuery({
     query: `query getFrontPageStatus {
       readingSettings {
@@ -78,7 +78,7 @@ export async function getFrontPageStatus(): Promise<readingSettings> {
   return res.readingSettings;
 }
 
-export async function getPostsPerPage(): Promise<readingSettings> {
+export async function getPostsPerPage(): Promise<readingSettingsType> {
   const res = await wpQuery({
     query: `query getPostsPerPage {
       readingSettings {
@@ -90,7 +90,7 @@ export async function getPostsPerPage(): Promise<readingSettings> {
   return res.readingSettings;
 }
 
-export async function getPageIds(): Promise<readingSettings> {
+export async function getPageIds(): Promise<readingSettingsType> {
   const res = await wpQuery({
     query: `query getPageIds {
       readingSettings {

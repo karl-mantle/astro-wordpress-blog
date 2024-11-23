@@ -1,35 +1,41 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import PostCard from '../../components/cards/PostCard.astro';
-import Pagination from '../../components/ui/Pagination.astro';
+import type { ArchiveType, NodeByUri } from '../../types.ts';
 import { getOpenGraph } from '../../utils/gqlYoastSeo.ts';
 import { getPostsByCategory, getPostsByTag } from '../../utils/gqlPosts';
 import { getAllTerms, getNodeByURI } from '../../utils/gqlRoutes';
+import Layout from '../../layouts/Layout.astro';
+import PostCard from '../../components/cards/PostCard.astro';
+import Pagination from '../../components/ui/Pagination.astro';
+
+interface Paths { 
+  params: { term: string };
+  props: { node: NodeByUri };
+  [key: string]: any;
+}
 
 // fallback image for if post has no featured image
 const openGraphData = await getOpenGraph();
-const defaultImage = openGraphData.openGraph.defaultImage.sourceUrl;
+const defaultImage = openGraphData.sourceUrl;
 
-export async function getStaticPaths({ paginate }) {
+export async function getStaticPaths({ paginate }: { paginate: Function }) {
   const allTerms = await getAllTerms();
 
-  let paths = [];
+  let paths: Paths[] = [];
 
   for (const term of allTerms) {
-    const { slug, uri } = term;
-
+    const { name, uri } = term;
     const nodeData = await getNodeByURI(uri);
 
     let posts;
-    switch (nodeData.__typename) {
+    switch (nodeData.nodeByUri.__typename) {
       case 'Category':
-        posts = await getPostsByCategory(slug);
+        posts = await getPostsByCategory(name);
         break;
       case 'Tag':
-        posts = await getPostsByTag(slug);
+        posts = await getPostsByTag(name);
         break;
       default:
-        posts = await getPostsByTag(slug);
+        posts = await getPostsByTag(name);
     }
 
     const paginatedPosts = paginate(posts, {
@@ -37,7 +43,7 @@ export async function getStaticPaths({ paginate }) {
       pageSize: 9
     });
 
-    paginatedPosts.forEach(path => {
+    paginatedPosts.forEach((path: Paths) => {
       path.props = { ...path.props, node: nodeData.nodeByUri };
     });
 
@@ -46,8 +52,7 @@ export async function getStaticPaths({ paginate }) {
   return paths;
 }
 
-const { page, node } = Astro.props;
-const params = Astro.params;
+const { page, node } = Astro.props as { page: ArchiveType; node: NodeByUri };
 ---
 
 <Layout title={node.seo?.title || node.title} metaDesc={node.seo?.metaDesc}>

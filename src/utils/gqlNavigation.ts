@@ -1,7 +1,7 @@
 import { wpQuery } from './wpQuery';
-import type { menuItems } from '../types';
+import type { menuItemsType } from '../types';
 
-export async function getNavigation(): Promise<menuItems> {
+export async function getNavigation(): Promise<menuItemsType> {
   const res = await wpQuery({
     query: `query getNavigation {
       menuItems(where: {location: PRIMARY}) {

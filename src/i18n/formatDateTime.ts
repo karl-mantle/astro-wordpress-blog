@@ -1,14 +1,14 @@
 import { getDateTimeFormat } from '../utils/gqlSettings';
 import { setLocale } from './setLocale';
 
-const suffixes = {
+const suffixes: { [key: string]: string[] } = {
   'en': ['th', 'st', 'nd', 'rd'],
   'dk': ['test', 'dansk', 'dag', 'sv'],
   // to do add other language suffixes?
 };
 
 // this possibly isn't worth pursuing yet now as won't apply to many non-IE languages, also RTL scripts?
-const getSuffix = (day, locale) => {
+const getSuffix = (day: number, locale: string) => {
   const lang = locale.split('-')[0];
   const suffixSet = suffixes[lang] || suffixes['en'];
 
@@ -22,9 +22,9 @@ const getSuffix = (day, locale) => {
   }
 };
 
-const formatMapping = {
+const formatMapping: {[key: string]: (date: Date, locale: string) => string } = {
   d: date => String(date.getDate()).padStart(2, '0'),
-  j: date => date.getDate(),
+  j: date => String(date.getDate()),
   S: (date, locale) => { // needs looking at what languages use ordinal suffixes and what don't
     const day = date.getDate();
     return getSuffix(day, locale);
@@ -32,35 +32,35 @@ const formatMapping = {
   l: (date, locale) => date.toLocaleDateString(locale, { weekday: 'long' }),
   D: (date, locale) => date.toLocaleDateString(locale, { weekday: 'short' }),
   m: date => String(date.getMonth() + 1).padStart(2, '0'),
-  n: date => date.getMonth() + 1,
+  n: date => String(date.getMonth() + 1),
   F: (date, locale) => date.toLocaleDateString(locale, { month: 'long' }),
   M: (date, locale) => date.toLocaleDateString(locale, { month: 'short' }),
-  Y: date => date.getFullYear(),
+  Y: date => String(date.getFullYear()),
   y: date => String(date.getFullYear()).slice(-2),
   a: date => date.getHours() < 12 ? 'am' : 'pm',
   A: date => date.getHours() < 12 ? 'AM' : 'PM',
-  g: date => (date.getHours() % 12) || 12,
+  g: date => String((date.getHours() % 12) || 12),
   h: date => String((date.getHours() % 12) || 12).padStart(2, '0'),
-  G: date => date.getHours(),
+  G: date => String(date.getHours()),
   H: date => String(date.getHours()).padStart(2, '0'),
   i: date => String(date.getMinutes()).padStart(2, '0'),
   s: date => String(date.getSeconds()).padStart(2, '0'),
   T: date => date.toLocaleTimeString('en-US', { timeZoneName: 'short' }).split(' ')[2], // to do multilingual timezones, why not
   c: date => date.toISOString(),
   r: date => date.toUTCString(),
-  U: date => Math.floor(date.getTime() / 1000)
+  U: date => String(Math.floor(date.getTime() / 1000))
 };
 
-export async function getFormattedDate(dateString) {
-  const settings = await getDateTimeFormat();
-  const locale = await setLocale();
-  return formatDate(dateString, settings.dateFormat, settings.timeFormat, locale);
-}
-
-export function formatDate(dateString, dateFormat, timeFormat, locale = 'en-US') {
+export function formatDate(dateString: string, dateFormat: string, timeFormat:string, locale = 'en-US'): string {
   const date = new Date(dateString);
-  const replaceDateFormat = match => (formatMapping[match] ? formatMapping[match](date, locale) : match);
+  const replaceDateFormat = (match: string): string => (formatMapping[match] ? formatMapping[match](date, locale) : match);
 
   const formatString = `${dateFormat} ${timeFormat}`.trim();
   return formatString.replace(/d|j|S|l|D|m|n|F|M|Y|y|a|A|g|h|G|H|i|s|T|c|r|U/g, replaceDateFormat);
+}
+
+export async function getFormattedDate(dateString: string): Promise<string> {
+  const settings = await getDateTimeFormat();
+  const locale = await setLocale();
+  return formatDate(dateString, settings.dateFormat, settings.timeFormat, locale);
 }

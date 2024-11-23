@@ -1,6 +1,6 @@
 import { getLanguage } from '../utils/gqlSettings';
 
-const localeMap = {
+const localeMap: { [key: string]: string } = {
   '': 'en-US',
   'en_US': 'en-US',
   'en_GB': 'en-GB',
@@ -23,8 +23,8 @@ const localeMap = {
   // to do add more of these...
 };
 
-export async function setLocale() {
-  const res = await getLanguage();
+export async function setLocale(): Promise<string> {
+  const res: { language: string } = await getLanguage();
   const { language } = res;
   return localeMap[language] || 'en-US';
 }

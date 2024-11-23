@@ -77,7 +77,7 @@ export async function getPostsByTag(tag: string): Promise<NodeByUri["posts"]> {
 export async function getPostsByCategory(category: string): Promise<NodeByUri["posts"]> {
   const res = await wpQuery({
     query: `query getPostsByCategory($category: String) {
-      posts(where: {CategoryName: $category}) {
+      posts(where: {categoryName: $category}) {
         nodes {
           uri
           title

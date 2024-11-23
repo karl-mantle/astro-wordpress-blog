@@ -1,5 +1,5 @@
 import { wpQuery } from './wpQuery.ts';
-import type { GetAllUrisResponse } from '../types.ts';
+import type { GetAllUrisResponse, NodeByUri } from '../types.ts';
 
 export async function getAllUris(): Promise<{ params: { uri: string } }[]> {
   const res: GetAllUrisResponse = await wpQuery({
@@ -34,32 +34,32 @@ export async function getAllUris(): Promise<{ params: { uri: string } }[]> {
 
 // not sure which way is better ^ v
 
-export async function getAllTerms(): Promise<{ slug: string, uri: string }[]> {
+export async function getAllTerms(): Promise<{ name: string, uri: string }[]> {
   const res = await wpQuery({
     query: `query GetAllTerms {
       categories {
         nodes {
-          slug
+          name
           uri
         }
       }
       tags {
         nodes {
-          slug
+          name
           uri
         }
       }
     }`
   });
 
-  const allCategories = res.categories.nodes.map((category: { slug: string, uri: string }) => ({
-    id: category.slug,
+  const allCategories = res.categories.nodes.map((category: { name: string, uri: string }) => ({
+    name: category.name,
     uri: category.uri,
     type: 'category'
   }));
 
-  const allTags = res.tags.nodes.map((tag: { slug: string, uri: string }) => ({
-    id: tag.slug,
+  const allTags = res.tags.nodes.map((tag: { name: string, uri: string }) => ({
+    name: tag.name,
     uri: tag.uri,
     type: 'tag'
   }));
@@ -71,7 +71,7 @@ export async function getAllTerms(): Promise<{ slug: string, uri: string }[]> {
 
 // get node data
 
-export async function getNodeByURI(uri: string) {
+export async function getNodeByURI(uri: string): Promise<{ nodeByUri: NodeByUri }> {
   const res = await wpQuery({
     query: `query GetNodeByURI($uri: String!) {
       nodeByUri(uri: $uri) {

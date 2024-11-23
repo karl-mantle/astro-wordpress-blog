@@ -1,5 +1,5 @@
 ---
-import type { MenuItem } from '../../types.ts';
+import type { MenuItemType } from '../../types.ts';
 import { getNavigation } from '../../utils/gqlNavigation.ts';
 import IconChevronDown from '../icons/IconChevronDown.astro';
 import IconChevronUp from '../icons/IconChevronUp.astro';
@@ -7,8 +7,8 @@ import IconArrowRight from '../icons/IconArrowRight.astro';
 
 const menuData = await getNavigation();
 
-function createMenuTree(menuItems: MenuItem[]): MenuItem[] {
-  const menuTree: MenuItem[] = [];
+function createMenuTree(menuItems: MenuItemType[]): MenuItemType[] {
+  const menuTree: MenuItemType[] = [];
 
   menuItems.forEach(item => {
     if (!item.parentId) {
@@ -36,9 +36,8 @@ const menuTree = createMenuTree(menuData.nodes);
 
   <ul class="absolute top-full md:top-auto left-0 md:left-auto z-20 h-[calc(100vh-90px)] w-full md:h-auto md:relative md:inline-flex md:gap-5 md:px-5 bg-white dark:bg-black md:bg-transparent md:dark:bg-transparent">
 
-    {menuTree.map((item: MenuItem) => (
+    {menuTree.map((item: MenuItemType) => (
       <li
-        key={item.id}
         class="relative flex flex-col md:gap-2"
         x-data="{ subMenuOpen: false }"
         @keydown.window.escape="subMenuOpen = false"
@@ -80,8 +79,8 @@ const menuTree = createMenuTree(menuData.nodes);
             x-show="subMenuOpen"
             @click.away="subMenuOpen = false"
           >
-            {item.children.map((child: MenuItem) => (
-              <li key={child.id} class="flex justify-between items-center px-4 py-2 text-lg md:text-base text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white md:p-0 border-b-2 border-white dark:border-black md:border-gray-200 md:hover:border-black dark:md:border-gray-700 dark:md:hover:border-white">
+            {item.children.map((child: MenuItemType) => (
+              <li class="flex justify-between items-center px-4 py-2 text-lg md:text-base text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white md:p-0 border-b-2 border-white dark:border-black md:border-gray-200 md:hover:border-black dark:md:border-gray-700 dark:md:hover:border-white">
                 <a 
                   class="block p-2 font-medium" 
                   href={child.uri}

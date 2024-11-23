@@ -1,5 +1,5 @@
 ---
-import type { SocialData } from '../../types.ts';
+import type { SocialLinkType } from '../../types.ts';
 import { getSocialData } from '../../utils/gqlYoastSeo.ts';
 import IconBrandFacebook from '../icons/IconBrandFacebook.astro';
 import IconBrandInstagram from '../icons/IconBrandInstagram.astro';
@@ -10,7 +10,7 @@ import IconBrandX from '../icons/IconBrandX.astro';
 import IconBrandWikipedia from '../icons/IconBrandWikipedia.astro';
 import IconBrandYouTube from '../icons/IconBrandYoutube.astro';
 
-const iconMap = {
+const iconMap: { [key: string]: (_props: any) => any } = {
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandLinkedIn,
@@ -21,10 +21,10 @@ const iconMap = {
   IconBrandYouTube
 };
 
-let combinedSocials = [];
+let combinedSocials: { url: string; name: string; iconName: string }[] = [];
 
 const fetchSocialData = async () => {
-  const socialData: SocialData = await getSocialData();
+  const socialData: SocialLinkType = await getSocialData();
   const socials = socialData;
 
   const processSocial = (url: string, platform: string) => {
@@ -39,7 +39,7 @@ const fetchSocialData = async () => {
         return { url, name: 'Myspace', iconName: 'IconBrandMyspace' };
       case 'pinterest':
         return { url, name: 'Pinterest', iconName: 'IconBrandPinterest' };
-      case 'twitter': // why? because for some reason YoastSEO only returns the username
+      case 'twitter':
         return { url: `https://www.x.com/${url}`, name: 'X', iconName: 'IconBrandX' };
       case 'wikipedia':
         return { url, name: 'Wikipedia', iconName: 'IconBrandWikipedia' };
@@ -50,14 +50,13 @@ const fetchSocialData = async () => {
     }
   };
 
-  Object.entries(socials).forEach(([platform, data]) => {
+  Object.entries(socials).forEach(([platform, data]: [string, any]) => {
     if (data.url || data.username) {
       const socialData = processSocial(data.url || data.username, platform);
       if (socialData) combinedSocials.push(socialData);
     }
   });
 
-  // I think technically we need premium to add these URLs, but we don't really ;-)
   socials.otherSocials.forEach(social => {
     const platform = social.match(/wikipedia|myspace|pinterest|youtube|instagram|linkedin/gi)?.[0];
     if (platform) {
@@ -74,7 +73,7 @@ await fetchSocialData();
   {combinedSocials.map(social => {
     const IconComponent = iconMap[social.iconName];
     return (
-      <li key={social.url} class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+      <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
         <a href={social.url} target="_blank" rel="noopener noreferrer" aria-label={`opens ${social.name} link in a new tab`}>
           <IconComponent height={24} width={24} />
         </a>
