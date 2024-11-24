@@ -1,5 +1,13 @@
 # build output
 #dist/
+
+# source files
+
+public/
+src/
+.mjs
+.json
+
 # generated types
 .astro/
 
