@@ -42,7 +42,7 @@ const { page }: { page: ArchiveType } = Astro.props;
           title={title}
           dateGmt={dateGmt}
           excerpt={excerpt.replace(/<(.|\n)*?>/g, '')}
-          href={`${Astro.site}${uri}`.replace(/([^:]\/)\/+/g, "$1")}
+          href={uri}
         />
       ))}
     </div>

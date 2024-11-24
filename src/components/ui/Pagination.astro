@@ -11,7 +11,7 @@ const { page } = Astro.props;
       {page.url.prev ? 
         <a
           class="flex gap-2 px-2 my-auto font-semibold text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white"
-          href={`${Astro.site}${page.url.prev}`.replace(/([^:]\/)\/+/g, "$1")}
+          href={`${page.url.prev}`.replace(/([^:]\/)\/+/g, "$1")}
           aria-label="to previous page"
         >
           <IconArrowLeft height={32} width={32}/>
@@ -35,7 +35,7 @@ const { page } = Astro.props;
       {page.url.next ? 
         <a
           class="flex gap-2 px-2 my-auto font-semibold text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white"
-          href={`${Astro.site}${page.url.next}`.replace(/([^:]\/)\/+/g, "$1")}
+          href={`${page.url.next}`.replace(/([^:]\/)\/+/g, "$1")}
           aria-label="to next page"
         >
           <span class="border-b-2 border-transparent hover:border-black dark:hover:border-white" aria-hidden="true">Next</span>
