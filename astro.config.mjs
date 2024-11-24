@@ -6,6 +6,7 @@ import alpinejs from '@astrojs/alpinejs';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://example.com',
+  site: 'https://karl-mantle.github.io/',
+  base: 'astro-wordpress-blog/',
   integrations: [sitemap(), tailwind(), alpinejs()],
 });
