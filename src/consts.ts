@@ -1,5 +1,12 @@
-// Place any global data in this file.
-// You can import this data from anywhere in your site by using the `import` keyword.
+import { getLanguage, getDateTimeFormat, getSiteTitle, getSiteDescription } from "./utils/gqlSettings";
 
-export const SITE_TITLE = 'Astro Blog';
-export const SITE_DESCRIPTION = 'Welcome to my website!';
+// site info
+export const globalSiteTitle = await getSiteTitle;
+export const globalSiteDescription = await getSiteDescription;
+
+// i18n
+const resDateTimeFormat = await getDateTimeFormat();
+
+export const globalDateFormat = resDateTimeFormat.dateFormat;
+export const globalTimeFormat = resDateTimeFormat.timeFormat;
+export const globalLanguage = await getLanguage();

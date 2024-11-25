@@ -93,7 +93,6 @@ export interface NodeByUri {
 export interface generalSettingsType {
   dateFormat: string;
   description: string;
-  language: string;
   timeFormat: string;
   timezone: string;
   title: string;

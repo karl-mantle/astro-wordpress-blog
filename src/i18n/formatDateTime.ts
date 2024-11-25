@@ -1,10 +1,8 @@
-import { getDateTimeFormat } from '../utils/gqlSettings';
-import { setLocale } from './setLocale';
+import { globalDateFormat, globalTimeFormat, globalLanguage } from '../consts';
 
 const suffixes: { [key: string]: string[] } = {
   'en': ['th', 'st', 'nd', 'rd'],
-  'dk': ['test', 'dansk', 'dag', 'sv'],
-  // to do add other language suffixes?
+  // to do
 };
 
 // this possibly isn't worth pursuing yet now as won't apply to many non-IE languages, also RTL scripts?
@@ -12,7 +10,6 @@ const getSuffix = (day: number, locale: string) => {
   const lang = locale.split('-')[0];
   const suffixSet = suffixes[lang] || suffixes['en'];
 
-  // this will only work for english
   if (day > 3 && day < 21) return suffixSet[0];
   switch (day % 10) {
     case 1: return suffixSet[1];
@@ -25,7 +22,7 @@ const getSuffix = (day: number, locale: string) => {
 const formatMapping: {[key: string]: (date: Date, locale: string) => string } = {
   d: date => String(date.getDate()).padStart(2, '0'),
   j: date => String(date.getDate()),
-  S: (date, locale) => { // needs looking at what languages use ordinal suffixes and what don't
+  S: (date, locale) => { // needs looking at if useful or not
     const day = date.getDate();
     return getSuffix(day, locale);
   },
@@ -51,16 +48,10 @@ const formatMapping: {[key: string]: (date: Date, locale: string) => string } = 
   U: date => String(Math.floor(date.getTime() / 1000))
 };
 
-export function formatDate(dateString: string, dateFormat: string, timeFormat:string, locale = 'en-US'): string {
-  const date = new Date(dateString);
-  const replaceDateFormat = (match: string): string => (formatMapping[match] ? formatMapping[match](date, locale) : match);
+export function getFormattedDate(dateGmt: string): string {
+  const date = new Date(dateGmt);
+  const replaceDateFormat = (match: string): string => (formatMapping[match] ? formatMapping[match](date, globalLanguage) : match);
 
-  const formatString = `${dateFormat} ${timeFormat}`.trim();
+  const formatString = `${globalDateFormat} ${globalTimeFormat}`.trim();
   return formatString.replace(/d|j|S|l|D|m|n|F|M|Y|y|a|A|g|h|G|H|i|s|T|c|r|U/g, replaceDateFormat);
-}
-
-export async function getFormattedDate(dateString: string): Promise<string> {
-  const settings = await getDateTimeFormat();
-  const locale = await setLocale();
-  return formatDate(dateString, settings.dateFormat, settings.timeFormat, locale);
 }

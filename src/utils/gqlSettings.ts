@@ -3,6 +3,44 @@ import type { generalSettingsType, readingSettingsType } from '../types';
 
 // general settings
 
+export async function getSiteTitle(): Promise<generalSettingsType> {
+  const res = await wpQuery({
+    query: `query getSiteTitle {
+      generalSettings {
+        title
+      }
+    }`
+  });
+
+  return res.generalSettings;
+}
+
+export async function getSiteDescription(): Promise<generalSettingsType> {
+  const res = await wpQuery({
+    query: `query getSiteDescription {
+      generalSettings {
+        description
+      }
+    }`
+  });
+
+  return res.generalSettings.description;
+}
+
+export async function getLanguage(): Promise<string> {
+  const res = await wpQuery({
+    query: `query getLanguage {
+      generalSettings {
+        language
+      }
+    }`
+  });
+
+  const language = res.generalSettings.language.replace(/_/g, '-');
+
+  return language;
+}
+
 export async function getDateTimeFormat(): Promise<generalSettingsType> {
   const res = await wpQuery({
     query: `query getDateTimeFormat {
@@ -16,47 +54,11 @@ export async function getDateTimeFormat(): Promise<generalSettingsType> {
   return res.generalSettings;
 }
 
-export async function getDescription(): Promise<generalSettingsType> {
-  const res = await wpQuery({
-    query: `query getDescription {
-      generalSettings {
-        description
-      }
-    }`
-  });
-
-  return res.generalSettings;
-}
-
-export async function getLanguage(): Promise<generalSettingsType> {
-  const res = await wpQuery({
-    query: `query getLanguage {
-      generalSettings {
-        language
-      }
-    }`
-  });
-
-  return res.generalSettings;
-}
-
 export async function getTimeZone(): Promise<generalSettingsType> {
   const res = await wpQuery({
     query: `query getTimeZone {
       generalSettings {
         timezone
-      }
-    }`
-  });
-
-  return res.generalSettings;
-}
-
-export async function getSiteTitle(): Promise<generalSettingsType> {
-  const res = await wpQuery({
-    query: `query getSiteTitle {
-      generalSettings {
-        title
       }
     }`
   });
@@ -102,7 +104,7 @@ export async function getPostsPageId(): Promise<readingSettingsType> {
   return res.readingSettings;
 }
 
-export async function getSlugByPageId(pageId: string) {
+export async function getSlugByPageId(pageId: string): Promise<string> {
   const res = await wpQuery({
     query: `query getSlugByPageId {
       pageBy(pageId: ${pageId}) {
