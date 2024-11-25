@@ -13,10 +13,6 @@ interface Paths {
   [key: string]: any;
 }
 
-// fallback image for if post has no featured image
-const openGraphData = await getOpenGraph();
-const defaultImage = openGraphData.sourceUrl;
-
 export async function getStaticPaths({ paginate }: { paginate: Function }) {
   const allTerms = await getAllTerms();
 
@@ -51,6 +47,10 @@ export async function getStaticPaths({ paginate }: { paginate: Function }) {
   }
   return paths;
 }
+
+// fallback image for if post has no featured image
+const openGraphData = await getOpenGraph();
+const defaultImage = openGraphData.sourceUrl;
 
 const { page, node } = Astro.props as { page: ArchiveType; node: NodeByUri };
 ---

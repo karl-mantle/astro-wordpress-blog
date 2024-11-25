@@ -100,12 +100,10 @@ export interface generalSettingsType {
 }
 
 export interface readingSettingsType {
-  readingSettings: {
-    showOnFront: 'page' | 'posts';
-    postsPerPage: number;
-    pageOnFront: number;
-    pageForPosts: number;
-  };
+  showOnFront: 'page' | 'posts';
+  postsPerPage: number;
+  pageOnFront: string;
+  pageForPosts: string;
 }
 
 // gqlYoastSeo.ts

@@ -1,29 +1,51 @@
 ---
-import type { ArchiveType, NodeByUri } from '../../types.ts';
+import type { ArchiveType, NodeByUri } from '../../types';
+import { getSlugByPageId, getPostsPageId, getPostsPerPage } from '../../utils/gqlSettings';
 import { getNodeByURI } from '../../utils/gqlRoutes';
 import { getPostsByMostRecent } from '../../utils/gqlPosts';
-import { getOpenGraph } from '../../utils/gqlYoastSeo.ts';
+import { getOpenGraph } from '../../utils/gqlYoastSeo';
 import Layout from '../../layouts/Layout.astro';
 import PostCard from '../../components/cards/PostCard.astro';
 import Pagination from '../../components/ui/Pagination.astro';
 
-// fix this part, get from whatever is set as post page
-const uri = `/${(Astro.params as { uri: string }).uri}/`;
-const data = await getNodeByURI(uri);
-const node: NodeByUri = data.nodeByUri;
+interface Paths { 
+  params: { archive: string };
+  props: { node: NodeByUri };
+  [key: string]: any;
+}
+
+export async function getStaticPaths({ paginate }: { paginate: Function }) {
+  let paths: Paths[] = [];
+
+  const postsPageId = await getPostsPageId();
+  const slug = await getSlugByPageId(postsPageId.pageForPosts);
+
+  const nodeData = await getNodeByURI(`/${slug}/`);
+
+  const amount = 100; // default
+  const posts = await getPostsByMostRecent(amount);
+
+  const pageSize = await getPostsPerPage();
+
+  const paginatedPosts = paginate(posts, {
+      params: { archive: slug },
+      pageSize: `${pageSize}`
+    });
+
+  paginatedPosts.forEach((path: Paths) => {
+    path.props = { ...path.props, node: nodeData.nodeByUri };
+  });
+
+  paths = paths.concat(paginatedPosts);
+
+  return paths;
+}
 
 // fallback image for if post has no featured image
 const openGraphData = await getOpenGraph();
 const defaultImage = openGraphData.sourceUrl;
 
-export async function getStaticPaths({ paginate }: { paginate: Function }) {
-  const amount = 500;
-  const posts = await getPostsByMostRecent(amount);
-
-  return paginate(posts, { pageSize: 9 });
-}
-
-const { page }: { page: ArchiveType } = Astro.props;
+const { page, node } = Astro.props as { page: ArchiveType; node: NodeByUri };
 ---
 
 <Layout title={node?.seo?.title || node?.title } metaDesc={node?.seo?.metaDesc}>

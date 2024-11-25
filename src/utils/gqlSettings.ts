@@ -64,7 +64,7 @@ export async function getSiteTitle(): Promise<generalSettingsType> {
   return res.generalSettings;
 }
 
-// reading settings
+// reading settings (archives)
 
 export async function getFrontPageStatus(): Promise<readingSettingsType> {
   const res = await wpQuery({
@@ -87,14 +87,13 @@ export async function getPostsPerPage(): Promise<readingSettingsType> {
     }`
   });
 
-  return res.readingSettings;
+  return res.readingSettings.postsPerPage;
 }
 
-export async function getPageIds(): Promise<readingSettingsType> {
+export async function getPostsPageId(): Promise<readingSettingsType> {
   const res = await wpQuery({
-    query: `query getPageIds {
+    query: `query getPostsPageId {
       readingSettings {
-        pageOnFront
         pageForPosts
       }
     }`
@@ -103,16 +102,14 @@ export async function getPageIds(): Promise<readingSettingsType> {
   return res.readingSettings;
 }
 
-// to do
-
-export async function getPageUri(pageId: string) {
+export async function getSlugByPageId(pageId: string) {
   const res = await wpQuery({
-    query: `query getPageUri {
+    query: `query getSlugByPageId {
       pageBy(pageId: ${pageId}) {
-        uri
+        slug
       }
     }`
   });
 
-  return res.pageBy;
+  return res.pageBy.slug;
 }
