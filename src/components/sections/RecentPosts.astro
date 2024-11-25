@@ -1,7 +1,6 @@
 ---
-import type { PostCardType } from '../../types.ts';
-import { getPostsByMostRecent } from '../../utils/gqlPosts.ts';
-import { getOpenGraph } from '../../utils/gqlYoastSeo.ts';
+import type { PostCardType } from '../../types';
+import { getPostsByMostRecent } from '../../utils/gqlPosts';
 import PostCard from '../cards/PostCard.astro';
 import IconArrowRight from '../icons/IconArrowRight.astro';
 import IconArrowRightUp from '../icons/IconArrowRightUp.astro';
@@ -15,10 +14,6 @@ interface Props {
 }
 
 const { orientation = 'row', quantity = 3, filteredBy = 'recent', featuredPost = false, showViewAll = false }: Props = Astro.props;
-
-// fallback image for if post has no featured image
-const openGraphData = await getOpenGraph();
-const defaultImage = openGraphData.sourceUrl;
 
 let orientationClasses = '';
 let getFilteredPosts: PostCardType[] = [];
@@ -97,17 +92,13 @@ const posts: PostCardType[] = getFilteredPosts;
     <div class="absolute bottom-0 -z-40 block w-full border-b-2 border-gray-200 dark:border-gray-700" aria-hidden="true"></div>
   </header>
 
-
   <ul class={`${orientationClasses}${featuredPostClasses}`} role="presentation">
     {
       posts.map((post) => {
-        const featuredImageUrl = post.featuredImage?.node.sourceUrl || defaultImage;
-        const altText = post.featuredImage?.node.altText || 'placeholder image';
-
         return (
           <PostCard
-            featuredImage={featuredImageUrl}
-            altText={altText}
+            featuredImage={post.featuredImage?.node.sourceUrl}
+            altText={post.featuredImage?.node.altText}
             title={post.title}
             dateGmt={post.dateGmt}
             excerpt={post.excerpt.replace(/<(.|\n)*?>/g, '')}

@@ -1,6 +1,5 @@
 ---
-import type { ArchiveType, NodeByUri } from '../../types.ts';
-import { getOpenGraph } from '../../utils/gqlYoastSeo.ts';
+import type { ArchiveType, NodeByUri } from '../../types';
 import { getPostsByCategory, getPostsByTag } from '../../utils/gqlPosts';
 import { getAllTerms, getNodeByURI } from '../../utils/gqlRoutes';
 import Layout from '../../layouts/Layout.astro';
@@ -11,7 +10,7 @@ interface Paths {
   params: { term: string };
   props: { node: NodeByUri };
   [key: string]: any;
-}
+};
 
 export async function getStaticPaths({ paginate }: { paginate: Function }) {
   const allTerms = await getAllTerms();
@@ -32,7 +31,7 @@ export async function getStaticPaths({ paginate }: { paginate: Function }) {
         break;
       default:
         posts = await getPostsByTag(name);
-    }
+    };
 
     const paginatedPosts = paginate(posts, {
       params: { term: uri },
@@ -46,11 +45,7 @@ export async function getStaticPaths({ paginate }: { paginate: Function }) {
     paths = paths.concat(paginatedPosts);
   }
   return paths;
-}
-
-// fallback image for if post has no featured image
-const openGraphData = await getOpenGraph();
-const defaultImage = openGraphData.sourceUrl;
+};
 
 const { page, node } = Astro.props as { page: ArchiveType; node: NodeByUri };
 ---
@@ -67,7 +62,7 @@ const { page, node } = Astro.props as { page: ArchiveType; node: NodeByUri };
     <ul class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {page.data.map(({ title, excerpt, uri, dateGmt, featuredImage }) => (
         <PostCard
-          featuredImage={featuredImage?.node.sourceUrl || defaultImage}
+          featuredImage={featuredImage?.node.sourceUrl}
           altText={featuredImage?.node.altText || ''}
           title={title}
           dateGmt={dateGmt}

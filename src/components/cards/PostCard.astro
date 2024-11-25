@@ -1,20 +1,20 @@
 ---
 import { Image } from 'astro:assets';
-import { getFormattedDate } from '../../i18n/formatDateTime.ts';
+import { getFormattedDate } from '../../i18n/formatDateTime';
 import IconArrowRight from '../icons/IconArrowRight.astro';
 import IconArrowRightUp from '../icons/IconArrowRightUp.astro';
 import IconCalendar from '../icons/IconCalendar.astro';
 
 interface Props {
-  featuredImage: string,
-  altText: string,
+  featuredImage: string | undefined,
+  altText: string | undefined,
   title: string,
   dateGmt: string,
   excerpt: string,
   href: string,
 };
 
-const { featuredImage, altText, title, dateGmt, excerpt, href }: Partial<Props> = Astro.props;
+const { featuredImage = '/opengraph.jpg', altText = '', title, dateGmt, excerpt, href }: Partial<Props> = Astro.props;
 
 const formattedDate = await getFormattedDate(dateGmt);
 ---
@@ -68,7 +68,7 @@ const formattedDate = await getFormattedDate(dateGmt);
       width={800}
       height={600}
       format="webp"
-      class="h-full sm:max-h-72 lg:max-h-64 min-w-full object-cover shadow-md dark:shadow-gray-900"
+      class="h-full sm:min-h-48 sm:max-h-48 md:min-h-72 md:max-h-72 min-w-full object-cover shadow-md dark:shadow-gray-900"
       alt={altText}
   />
 </li>

@@ -3,7 +3,6 @@ import type { ArchiveType, NodeByUri } from '../../types';
 import { getSlugByPageId, getPostsPageId, getPostsPerPage } from '../../utils/gqlSettings';
 import { getNodeByURI } from '../../utils/gqlRoutes';
 import { getPostsByMostRecent } from '../../utils/gqlPosts';
-import { getOpenGraph } from '../../utils/gqlYoastSeo';
 import Layout from '../../layouts/Layout.astro';
 import PostCard from '../../components/cards/PostCard.astro';
 import Pagination from '../../components/ui/Pagination.astro';
@@ -12,7 +11,7 @@ interface Paths {
   params: { archive: string };
   props: { node: NodeByUri };
   [key: string]: any;
-}
+};
 
 export async function getStaticPaths({ paginate }: { paginate: Function }) {
   let paths: Paths[] = [];
@@ -39,11 +38,7 @@ export async function getStaticPaths({ paginate }: { paginate: Function }) {
   paths = paths.concat(paginatedPosts);
 
   return paths;
-}
-
-// fallback image for if post has no featured image
-const openGraphData = await getOpenGraph();
-const defaultImage = openGraphData.sourceUrl;
+};
 
 const { page, node } = Astro.props as { page: ArchiveType; node: NodeByUri };
 ---
@@ -53,13 +48,13 @@ const { page, node } = Astro.props as { page: ArchiveType; node: NodeByUri };
   <section class="not-prose flex flex-col py-8">
     <header class="flex flex-col mb-8 border-b-2 border-gray-200 dark:border-gray-700">
       <h2 class="text-3xl mb-2 font-semibold text-gray-700 dark:text-gray-200">Archive</h2>
-      <p class="mb-2">Now showing {page.start + 1} to {page.end + 1} posts out of {page.total} posts.</p>
+      <p class="mb-2">Showing {page.start + 1} to {page.end + 1} posts out of {page.total} posts.</p>
     </header>
 
     <div class="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {page.data.map(({ title, excerpt, uri, dateGmt, featuredImage }) => (
         <PostCard
-          featuredImage={featuredImage?.node.sourceUrl || defaultImage}
+          featuredImage={featuredImage?.node.sourceUrl}
           altText={featuredImage?.node.altText || ''}
           title={title}
           dateGmt={dateGmt}
