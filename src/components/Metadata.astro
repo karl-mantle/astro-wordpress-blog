@@ -1,6 +1,7 @@
 ---
 import type { NodeByUri } from '../types';
-import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import faviconSrc from '../../public/favicon.png';
 
 interface MetaData {
   image: string;
@@ -9,20 +10,22 @@ interface MetaData {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const { title, description }: Partial<NodeByUri> = Astro.props;
-// import schema & ogimage
-const { image = '/blog-placeholder-1.jpg' }: Partial<MetaData> = Astro.props;
+const { image = '/opengraph.jpg' }: Partial<MetaData> = Astro.props;
+
+const favicon = await getImage({ src: faviconSrc, format: 'png' });
+const appleTouchIcon = await getImage({
+  src: faviconSrc,
+  width: 180,
+  height: 180,
+  format: 'png'
+});
 ---
 
-<!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="generator" content={Astro.generator} />
-
-<!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 
-<!-- Primary Meta Tags -->
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
@@ -41,4 +44,10 @@ const { image = '/blog-placeholder-1.jpg' }: Partial<MetaData> = Astro.props;
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
 
-<!-- Stylesheets -->
+<!-- Favicons -->
+<link rel="icon" href="/favicon.ico" sizes="32x32, 16x16" />
+<link rel="icon" href={favicon.src} type="image/png" />
+<link rel="apple-touch-icon" href={appleTouchIcon.src} />
+<link rel="manifest" href="/manifest.json" />
+
+<!-- Resources -->

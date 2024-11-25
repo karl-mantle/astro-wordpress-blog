@@ -1,8 +1,8 @@
 ---
+import type { NodeByUri } from '../types.ts';
+import { getAllUris, getNodeByURI } from '../utils/gqlRoutes.ts';
 import Layout from '../layouts/Layout.astro';
 import RecentPosts from '../components/sections/RecentPosts.astro';
-import { getAllUris, getNodeByURI } from '../utils/gqlRoutes.ts';
-import type { NodeByUri } from '../types.ts';
 
 const uri = `/${Astro.params.uri}/`;
 const data = await getNodeByURI(uri);

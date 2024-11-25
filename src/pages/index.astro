@@ -1,11 +1,14 @@
 ---
+import type { NodeByUri } from '../types.ts';
+import { getNodeByURI } from '../utils/gqlRoutes.ts';
 import Layout from '../layouts/Layout.astro'
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts.ts';
 import RecentPosts from '../components/sections/RecentPosts.astro';
+
+const data = await getNodeByURI("/");
+const node: NodeByUri = data.nodeByUri;
 ---
 
-<!-- need to find a better way of setting title & meta desc -->
-<Layout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+<Layout title={node.seo?.title || node.title} metaDesc={node.seo?.metaDesc}>
 
   <RecentPosts
     orientation='row'
