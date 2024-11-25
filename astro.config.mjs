@@ -8,7 +8,7 @@ import alpinejs from '@astrojs/alpinejs';
 export default defineConfig({
   site: 'https://astro-wordpress-blog-mx79z.kinsta.page',
   image: {
-    domains: [import.meta.env.WP_URL],
+    domains: ['wpgraphql-blog-test.local'],
   },
   integrations: [
     sitemap(),
