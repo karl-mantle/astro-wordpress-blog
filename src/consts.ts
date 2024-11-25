@@ -1,8 +1,8 @@
 import { getLanguage, getDateTimeFormat, getSiteTitle, getSiteDescription } from "./utils/gqlSettings";
 
 // site info
-export const globalSiteTitle = await getSiteTitle;
-export const globalSiteDescription = await getSiteDescription;
+export const globalSiteTitle = await getSiteTitle();
+export const globalSiteDescription = await getSiteDescription();
 
 // i18n
 const resDateTimeFormat = await getDateTimeFormat();
