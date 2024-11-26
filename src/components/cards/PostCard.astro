@@ -20,7 +20,7 @@ const formattedDate = await getFormattedDate(dateGmt);
 ---
 
 <li
-  class="h-full flex flex-col-reverse hover:shadow-md dark:shadow-gray-900 brightness-90 hover:brightness-100 focus:brightness-100"
+  class="h-full flex flex-col-reverse hover:shadow-md dark:shadow-black brightness-90 hover:brightness-100 focus:brightness-100 transition duration-300"
   tabindex="0"
   aria-label={title}
   :class="{'cursor-pointer': !preventClick}"
@@ -33,7 +33,7 @@ const formattedDate = await getFormattedDate(dateGmt);
 >
   <article class="flex flex-col flex-grow gap-2 p-4 mb-auto">
 
-    <h3 class="font-medium text-xl text-gray-700 dark:text-gray-200">
+    <h3 class="font-medium text-xl text-theme-800 hover:text-theme-900 dark:text-theme-200 dark:hover:text-theme-100 underline underline-offset-8 decoration-transparent hover:decoration-theme-900 dark:hover:decoration-theme-100 transition duration-300">
       <a href={href} tab-index="-1" x-ref="link">
         {title}
       </a>
@@ -42,15 +42,15 @@ const formattedDate = await getFormattedDate(dateGmt);
     <span class="inline-flex gap-2" aria-hidden="false">
       <IconCalendar height={16} width={16} />
       <span class="sr-only">Post published on: </span>
-      <time datetime={dateGmt}>{formattedDate}</time>
+      <time class="text-theme-800 dark:text-theme-200" datetime={dateGmt}>{formattedDate}</time>
     </span>
 
-    <p class="text-gray-700 dark:text-gray-200">
+    <p class="text-theme-800 dark:text-theme-200">
       {excerpt}
     </p>
     
-    <div class="flex gap-2 mt-auto font-medium text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
-      <span class="box-border border-transparent border-b-2 hover:border-black dark:border-white" aria-hidden="true">
+    <div class="flex gap-2 mt-auto font-medium text-theme-800 hover:text-theme-900 dark:text-theme-200 dark:hover:text-theme-100 transition duration-300">
+      <span class="border-transparent border-b-2 hover:border-theme-900 dark:hover:border-theme-100 transition duration-300" aria-hidden="true">
         Read more
       </span>
 
@@ -68,7 +68,7 @@ const formattedDate = await getFormattedDate(dateGmt);
       width={800}
       height={600}
       format="webp"
-      class="h-full sm:min-h-48 sm:max-h-48 md:min-h-72 md:max-h-72 min-w-full object-cover shadow-md dark:shadow-gray-900"
+      class="h-full sm:min-h-48 sm:max-h-48 md:min-h-72 md:max-h-72 min-w-full object-cover"
       alt={altText}
   />
 </li>

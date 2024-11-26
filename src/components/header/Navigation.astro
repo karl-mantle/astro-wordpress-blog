@@ -34,7 +34,7 @@ const menuTree = createMenuTree(menuData.nodes);
   :aria-expanded="siteNavigationOpen"
 >
 
-  <ul class="absolute top-full md:top-auto left-0 md:left-auto z-20 h-[calc(100vh-90px)] w-full md:h-auto md:relative md:inline-flex md:gap-5 md:px-5 bg-white dark:bg-black md:bg-transparent md:dark:bg-transparent">
+  <ul class="absolute top-full md:top-auto left-0 md:left-auto z-20 h-[calc(100vh-90px)] w-full md:h-auto md:relative md:inline-flex md:gap-5 md:px-5 bg-theme-100 dark:bg-theme-900 md:bg-transparent md:dark:bg-transparent">
 
     {menuTree.map((item: MenuItemType) => (
       <li
@@ -43,7 +43,7 @@ const menuTree = createMenuTree(menuData.nodes);
         @keydown.window.escape="subMenuOpen = false"
       >
 
-        <div class="flex flex-row justify-between px-4 py-2 md:p-0 text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white border-b-2 border-gray-200 hover:border-black dark:border-gray-700 dark:hover:border-white">
+        <div class="flex flex-row justify-between px-4 py-2 md:p-0 text-theme-800 hover:text-theme-900 dark:text-theme-200 dark:hover:text-theme-100 border-b-2 border-theme-300 hover:border-theme-900 dark:border-theme-700 dark:hover:border-theme-100 transition duration-300">
           
           <a
             class="flex p-2 text-lg md:text-base font-semibold"
@@ -74,13 +74,13 @@ const menuTree = createMenuTree(menuData.nodes);
 
         {item.children.length > 0 && (
           <ul
-            class="md:absolute md:left-0 md:top-full z-25 flex flex-col w-full bg-gray-200 dark:bg-gray-700 md:bg-white dark:md:bg-black md:shadow-xl dark:shadow-gray-900"
+            class="md:absolute md:left-0 md:top-full z-25 flex flex-col w-full bg-theme-400 dark:bg-theme-600 md:bg-theme-100 dark:md:bg-theme-900 md:shadow-xl dark:shadow-black"
             aria-label={`${item.label} sub-menu`}
             x-show="subMenuOpen"
             @click.away="subMenuOpen = false"
           >
             {item.children.map((child: MenuItemType) => (
-              <li class="flex justify-between items-center px-4 py-2 text-lg md:text-base text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white md:p-0 border-b-2 border-white dark:border-black md:border-gray-200 md:hover:border-black dark:md:border-gray-700 dark:md:hover:border-white">
+              <li class="flex justify-between items-center px-4 py-2 text-lg md:text-base text-theme-800 hover:text-theme-900 dark:text-theme-200 dark:hover:text-theme-100 md:p-0 border-b-2 border-theme-100 dark:border-theme-900 md:border-theme-300 md:hover:border-theme-900 dark:md:border-theme-700 dark:md:hover:border-theme-100 transition duration-300">
                 <a 
                   class="block p-2 font-medium" 
                   href={child.uri}
@@ -98,5 +98,5 @@ const menuTree = createMenuTree(menuData.nodes);
     ))}
   </ul>
 
-  <div class="absolute bottom-0 -z-40 block w-full border-b-2 border-gray-200 dark:border-gray-700" aria-hidden="true"></div>
+  <div class="absolute bottom-0 -z-40 block w-full border-b-2 border-theme-300 dark:border-theme-700" aria-hidden="true"></div>
 </nav>

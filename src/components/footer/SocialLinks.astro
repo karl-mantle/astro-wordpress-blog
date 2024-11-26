@@ -73,7 +73,7 @@ await fetchSocialData();
   {combinedSocials.map(social => {
     const IconComponent = iconMap[social.iconName];
     return (
-      <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+      <li class="text-theme-800 hover:text-theme-900 dark:text-theme-200 dark:hover:text-theme-100 transition duration-300">
         <a href={social.url} target="_blank" rel="noopener noreferrer" aria-label={`opens ${social.name} link in a new tab`}>
           <IconComponent height={24} width={24} />
         </a>

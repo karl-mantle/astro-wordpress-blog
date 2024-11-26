@@ -54,8 +54,8 @@ const { page, node } = Astro.props as { page: ArchiveType; node: NodeByUri };
 
   <section class="not-prose flex flex-col py-8">
 
-    <header class="flex flex-col mb-8 border-b-2 border-gray-200 dark:border-gray-700">
-      <h2 class="text-3xl mb-2 font-semibold text-gray-700 dark:text-gray-200">{node.__typename}: {node.name}</h2>
+    <header class="flex flex-col mb-8 border-b-2 border-theme-300 dark:border-theme-700">
+      <h2 class="text-3xl mb-2 font-semibold text-theme-800 dark:text-theme-200">{node.__typename}: {node.name}</h2>
       <p class="mb-2">Now showing {page.start + 1} to {page.end + 1} of all posts tagged with {node.name} out of {page.total} posts.</p>
     </header>
 

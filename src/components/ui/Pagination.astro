@@ -10,15 +10,15 @@ const { page } = Astro.props;
     <li class="flex justify-end w-1/4">
       {page.url.prev ? 
         <a
-          class="flex gap-2 px-2 my-auto font-semibold text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white"
+          class="flex gap-2 px-2 my-auto font-semibold text-theme-800 hover:text-theme-900 dark:text-theme-200 dark:hover:text-theme-100 transition duration-300"
           href={`${page.url.prev}`.replace(/([^:]\/)\/+/g, "$1")}
           aria-label="to previous page"
         >
           <IconArrowLeft height={32} width={32}/>
-          <span class="border-b-2 border-transparent hover:border-black dark:hover:border-white" aria-hidden="true">Previous</span>
+          <span class="border-b-2 border-transparent hover:border-theme-900 dark:hover:border-theme-100 transition duration-300" aria-hidden="true">Previous</span>
         </a>
         : 
-        <span class="flex gap-2 px-4 my-auto font-semibold text-gray-200 dark:text-gray-700" aria-disabled="true">
+        <span class="flex gap-2 px-4 my-auto font-semibold text-theme-200 dark:text-theme-800" aria-disabled="true">
           <IconArrowLeft height={32} width={32}/>
           Prev
         </span>
@@ -26,7 +26,7 @@ const { page } = Astro.props;
     </li>
 
     <li class="flex justify-center w-1/2">
-      <span class="px-4 pb-1 border-l-2 border-r-2 border-gray-200 dark:border-gray-700" aria-label="page indicator">
+      <span class="px-4 pb-1 border-l-2 border-r-2 border-theme-400 dark:border-theme-600" aria-label="page indicator">
         Page {page.currentPage} of {page.lastPage}
       </span>
     </li>
@@ -34,15 +34,15 @@ const { page } = Astro.props;
     <li class="flex justify-start w-1/4">
       {page.url.next ? 
         <a
-          class="flex gap-2 px-2 my-auto font-semibold text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white"
+          class="flex gap-2 px-2 my-auto font-semibold text-theme-800 hover:text-theme-900 dark:text-theme-200 dark:hover:text-theme-100 transition duration-300"
           href={`${page.url.next}`.replace(/([^:]\/)\/+/g, "$1")}
           aria-label="to next page"
         >
-          <span class="border-b-2 border-transparent hover:border-black dark:hover:border-white" aria-hidden="true">Next</span>
+          <span class="border-b-2 border-transparent hover:border-theme-900 dark:hover:border-theme-100 transition duration-300" aria-hidden="true">Next</span>
           <IconArrowRight height={32} width={32}/>
         </a>
         :
-        <span class="flex gap-2 px-4 my-auto font-semibold text-gray-200 dark:text-gray-700" aria-disabled="true">
+        <span class="flex gap-2 px-4 my-auto font-semibold text-theme-200 dark:text-theme-800" aria-disabled="true">
           Next
           <IconArrowRight height={32} width={32}/>
         </span>

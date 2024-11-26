@@ -10,11 +10,12 @@ import IconX from '../icons/IconX.astro'
 
 const iconHeight = 64;
 const iconWidth = 64;
+const listClasses = 'text-theme-800 hover:text-theme-900 dark:text-theme-200 dark:hover:text-theme-100 transition duration-300';
 const iconClasses = 'max-h-8 sm:max-h-10 md:max-h-8';
 ---
 <ul class="flex gap-4 justify-end items-center px-5 my-auto md:my-0 pb-2 md:pb-0 leading-none" role="toolbar" aria-label="toolbar">
 
-  <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white md:border-r-2 border-gray-200 dark:border-gray-700">
+  <li class=`${listClasses} md:border-r-2 border-theme-300 dark:border-theme-700`>
     <button
       class="inline-flex gap-1 md:pr-4"
       aria-label="open tags archive page"
@@ -25,7 +26,7 @@ const iconClasses = 'max-h-8 sm:max-h-10 md:max-h-8';
     </button>
   </li>
 
-  <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+  <li class=`${listClasses}`>
     <button
       class="m-auto"
       aria-label="open search"
@@ -34,13 +35,13 @@ const iconClasses = 'max-h-8 sm:max-h-10 md:max-h-8';
     </button>
   </li>
 
-  <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+  <li class=`${listClasses}`>
     <button aria-label="subscribe to RSS feed">
       <IconRss height={iconHeight} width={iconWidth} classes={iconClasses}/>
     </button>
   </li>
 
-  <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+  <li class=`${listClasses}`>
     <button
       aria-label="open GitHub repository in new tab"
       x-on:click="window.open('https://github.com/karl-mantle/astro-wordpress-blog/', '_blank', 'noopener,noreferrer')"
@@ -49,7 +50,7 @@ const iconClasses = 'max-h-8 sm:max-h-10 md:max-h-8';
     </button>
   </li>
 
-  <li class="text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+  <li class=`${listClasses}`>
     <button 
       aria-label="toggle dark mode"
       :aria-pressed="darkMode"
@@ -60,7 +61,7 @@ const iconClasses = 'max-h-8 sm:max-h-10 md:max-h-8';
     </button>
   </li>
 
-  <li class="md:hidden text-gray-700 hover:text-black dark:text-gray-200 dark:hover:text-white">
+  <li class=`md:hidden ${listClasses}`>
     <button
       aria-label="toggle site navigation"
       :aria-pressed="siteNavigationOpen"
