@@ -1,11 +1,10 @@
 ---
-import type { NodeByUri } from '../types.ts';
-import { getNodeByURI } from '../utils/gqlRoutes.ts';
+import type { NodeByUri } from '../types';
+import { getNodeByURI } from '../utils/gqlRoutes';
 import Layout from '../layouts/Layout.astro'
 import RecentPosts from '../components/sections/RecentPosts.astro';
 
-const data = await getNodeByURI("/");
-const node: NodeByUri = data.nodeByUri;
+const node: NodeByUri = await getNodeByURI("/");
 ---
 
 <Layout title={node.seo?.title || node.title} metaDesc={node.seo?.metaDesc}>

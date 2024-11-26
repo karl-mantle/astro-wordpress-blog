@@ -1,14 +1,24 @@
 import { wpQuery } from './wpQuery.ts';
-import type { GetAllUrisResponse, NodeByUri } from '../types.ts';
+import type { NodeByUri } from '../types.ts';
 
-export async function getAllUris(): Promise<{ params: { uri: string } }[]> {
-  const res: GetAllUrisResponse = await wpQuery({
-    query: `query GetAllUris {
+export async function getAllPosts(): Promise<{ uri: string }[]> {
+  const res = await wpQuery({
+    query: `query GetAllPosts {
       posts(where: {status: PUBLISH}) {
         nodes {
           uri
         }
       }
+    }`
+  });
+
+  
+  return res.posts.nodes;
+}
+
+export async function getAllPages(): Promise<{ uri: string }[]> {
+  const res = await wpQuery({
+    query: `query GetAllPages {
       pages(where: {status: PUBLISH}) {
         nodes {
           uri
@@ -17,22 +27,8 @@ export async function getAllUris(): Promise<{ params: { uri: string } }[]> {
     }`
   });
 
-  const uris = Object.values(res)
-    // combine nodes
-    .reduce((acc, currentValue) => acc.concat(currentValue.nodes), [] as { nodes: any[] }[])
-    // filter nodes
-    .filter((node: {uri: string}) => node.uri !== null)
-    // format nodes
-    .map((node: {uri: string}) => {
-      let trimmedURI = node.uri.substring(1);
-      trimmedURI = trimmedURI.substring(0, trimmedURI.length - 1);
-      return { params: { uri: trimmedURI } };
-    });
-
-  return uris;
+  return res.pages.nodes;
 }
-
-// not sure which way is better ^ v
 
 export async function getAllTerms(): Promise<{ name: string, uri: string }[]> {
   const res = await wpQuery({
@@ -71,13 +67,11 @@ export async function getAllTerms(): Promise<{ name: string, uri: string }[]> {
 
 // get node data
 
-export async function getNodeByURI(uri: string): Promise<{ nodeByUri: NodeByUri }> {
+export async function getNodeByURI(uri: string): Promise<NodeByUri> {
   const res = await wpQuery({
     query: `query GetNodeByURI($uri: String!) {
       nodeByUri(uri: $uri) {
         __typename
-        isContentNode
-        isTermNode
         ... on Post {
           uri
           title
@@ -155,5 +149,5 @@ export async function getNodeByURI(uri: string): Promise<{ nodeByUri: NodeByUri 
     variables: { uri }
   });
 
-  return { nodeByUri: res.nodeByUri }
+  return res.nodeByUri;
 }

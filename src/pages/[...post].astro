@@ -1,0 +1,48 @@
+---
+import type { NodeByUri } from '../types';
+import { getAllPosts, getNodeByURI } from '../utils/gqlRoutes';
+import Layout from '../layouts/Layout.astro';
+import RecentPosts from '../components/sections/RecentPosts.astro';
+
+interface Paths { 
+  params: { post: string };
+  props: { node: NodeByUri };
+  [key: string]: any;
+};
+
+export async function getStaticPaths() {
+  const allPosts = await getAllPosts();
+
+  let paths: Paths[] = [];
+
+  for (const post of allPosts) {
+    const { uri } = post;
+    
+    if (!uri) {
+      continue;
+    }
+
+    const nodeData = await getNodeByURI(uri);
+    const path: Paths = { params: { post: uri }, props: { node: nodeData } };
+    paths.push(path);
+  }
+
+  return paths;
+};
+
+const { node } = Astro.props as { node: NodeByUri };
+---
+
+<Layout title={node.seo?.title || node.title} metaDesc={node.seo?.metaDesc}>
+
+  <div class="flex gap-4">
+    <article class="flex-grow max-w-none" set:html={node.content}>
+      <h1>{node.title}</h1>
+      <!-- set:html content -->
+    </article>
+    <aside class="flex-shrink-0 w-72">
+      <RecentPosts orientation='column' quantity={3} filteredBy='recent'/>
+    </aside>
+  </div>
+
+</Layout>

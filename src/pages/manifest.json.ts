@@ -1,11 +1,10 @@
 import type { APIRoute } from 'astro';
-import type { NodeByUri } from '../types.ts';
+import type { NodeByUri } from '../types';
 import { getImage } from 'astro:assets';
-import { getNodeByURI } from '../utils/gqlRoutes.ts';
+import { getNodeByURI } from '../utils/gqlRoutes';
 import faviconSrc from '../../public/favicon.png';
 
-const data = await getNodeByURI("/");
-const node: NodeByUri = data.nodeByUri;
+const node: NodeByUri = await getNodeByURI("/");
 
 const manifestTitle = node?.seo?.title || 'Error: No title set.';
 const manifestDesc = node?.seo?.metaDesc || 'Error: No meta description set.';

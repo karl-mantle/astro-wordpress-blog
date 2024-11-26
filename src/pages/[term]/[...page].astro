@@ -22,7 +22,7 @@ export async function getStaticPaths({ paginate }: { paginate: Function }) {
     const nodeData = await getNodeByURI(uri);
 
     let posts;
-    switch (nodeData.nodeByUri.__typename) {
+    switch (nodeData.__typename) {
       case 'Category':
         posts = await getPostsByCategory(name);
         break;
@@ -39,7 +39,7 @@ export async function getStaticPaths({ paginate }: { paginate: Function }) {
     });
 
     paginatedPosts.forEach((path: Paths) => {
-      path.props = { ...path.props, node: nodeData.nodeByUri };
+      path.props = { ...path.props, node: nodeData };
     });
 
     paths = paths.concat(paginatedPosts);

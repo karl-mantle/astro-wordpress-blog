@@ -1,0 +1,42 @@
+---
+import type { NodeByUri } from '../types';
+import { getAllPages, getNodeByURI } from '../utils/gqlRoutes';
+import Layout from '../layouts/Layout.astro';
+
+interface Paths { 
+  params: { page: string };
+  props: { node: NodeByUri };
+  [key: string]: any;
+};
+
+export async function getStaticPaths() {
+  const allPages = await getAllPages();
+
+  let paths: Paths[] = [];
+
+  for (const page of allPages) {
+    const { uri } = page;
+    
+    if (!uri) {
+      continue;
+    }
+
+    const nodeData = await getNodeByURI(uri);
+    const path: Paths = { params: { page: uri }, props: { node: nodeData } };
+    paths.push(path);
+  }
+
+  return paths;
+};
+
+const { node } = Astro.props as { node: NodeByUri };
+---
+
+<Layout title={node.seo?.title || node.title} metaDesc={node.seo?.metaDesc}>
+
+  <div class="flex flex-col" set:html={node.content}>
+    <!-- set:html content -->
+  </div>
+
+</Layout>
+

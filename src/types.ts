@@ -1,4 +1,4 @@
-// gqlNavigation.ts
+// gqlNavigation
 
 export interface MenuItemType { 
   id: string;
@@ -12,20 +12,7 @@ export interface menuItemsType {
   nodes: MenuItemType[];
 }
 
-// gqlRoutes.ts
-
-export interface GetAllUrisResponse {
-  posts: {
-    nodes: {
-      uri: string
-    };
-  };
-  pages: {
-    nodes: {
-      uri: string
-    };
-  };
-};
+// gqlRoutes
 
 export interface YoastSEO {
   breadcrumbs: {
@@ -34,29 +21,28 @@ export interface YoastSEO {
   };
   metaDesc: string;
   title: string;
-};
+}
 
 export interface FeaturedImage {
   node: {
     sourceUrl: string;
     altText: string;
   };
-};
+}
 
 export interface Category {
   name: string;
   uri: string;
-};
+}
 
 export interface Tag {
   name: string;
   uri: string;
-};
+}
 
 export interface NodeByUri {
   __typename: string;
-  isContentNode: boolean;
-  isTermNode: boolean;
+  // shared
   title?: string;
   name?: string;
   uri?: string;
@@ -69,7 +55,7 @@ export interface NodeByUri {
   };
   featuredImage?: FeaturedImage | null;
   seo?: YoastSEO;
-  nodeByUri: NodeByUri;
+  // gqlPosts
   posts?: {
     nodes: {
       date: string;
@@ -86,9 +72,9 @@ export interface NodeByUri {
       featuredImage: FeaturedImage | null;
     }[];
   };
-};
+}
 
-// gqlSettings.ts
+// gqlSettings
 
 export interface generalSettingsType {
   dateFormat: string;
@@ -105,7 +91,7 @@ export interface readingSettingsType {
   pageForPosts: string;
 }
 
-// gqlYoastSeo.ts
+// gqlYoastSeo
 
 export interface OpenGraphType {
   sourceUrl: string;
@@ -135,7 +121,7 @@ export interface SchemaType {
       companyOrPerson: 'company' | 'person';
     };
   };
-};
+}
 
 export interface SocialLinkType {
   facebook: {
@@ -163,9 +149,9 @@ export interface SocialLinkType {
     url: URL;
   };
   otherSocials: string[];
-};
+}
 
-// post archive
+// archive
 
 export interface PostCardType {
   title: string;
