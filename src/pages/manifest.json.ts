@@ -1,15 +1,9 @@
 import type { APIRoute } from 'astro';
-import type { NodeByUri } from '../types';
+import { globalSiteDescription, globalSiteTitle } from '../consts';
 import { getImage } from 'astro:assets';
-import { getNodeByURI } from '../utils/gqlRoutes';
 import faviconSrc from '../../public/favicon.png';
 
-const node: NodeByUri = await getNodeByURI("/");
-
-const manifestTitle = node?.seo?.title || 'Error: No title set.';
-const manifestDesc = node?.seo?.metaDesc || 'Error: No meta description set.';
-
-const faviconPngSizes = [192, 256, 512];
+const faviconPngSizes = [96, 192, 512];
 
 export const GET: APIRoute = async () => {
   const icons = await Promise.all(
@@ -29,11 +23,14 @@ export const GET: APIRoute = async () => {
   );
 
   const manifest = {
-    name: `${manifestTitle}`,
-    description: `${manifestDesc}`,
+    name: `${globalSiteTitle}`,
+    description: `${globalSiteDescription}`,
+    short_name: `${globalSiteTitle}`,
     start_url: '/',
     display: 'standalone',
     id: 'some-unique-id',
+    background_color: '#171717',
+    theme_color: '#d4d4d4',
     icons,
   };
 

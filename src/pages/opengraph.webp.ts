@@ -11,9 +11,9 @@ export const GET: APIRoute = async () => {
   const arrayBuffer = await response.arrayBuffer();
   const imageBuffer = Buffer.from(arrayBuffer);
 
-  const ogImageBuffer = await sharp(imageBuffer).resize(1200, 630).toFormat('jpeg').toBuffer();
+  const ogImageBuffer = await sharp(imageBuffer).resize(1200, 630).toFormat('webp').toBuffer();
 
   return new Response(ogImageBuffer, {
-    headers: { 'Content-Type': 'image/jpeg' }
+    headers: { 'Content-Type': 'image/webp' }
   });
 };

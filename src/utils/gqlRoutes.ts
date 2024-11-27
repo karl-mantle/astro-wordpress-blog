@@ -4,7 +4,7 @@ import type { NodeByUri } from '../types.ts';
 export async function getAllPosts(): Promise<{ uri: string }[]> {
   const res = await wpQuery({
     query: `query GetAllPosts {
-      posts(where: {status: PUBLISH}) {
+      posts(where: {status: PUBLISH}, first: 100) {
         nodes {
           uri
         }
@@ -19,7 +19,7 @@ export async function getAllPosts(): Promise<{ uri: string }[]> {
 export async function getAllPages(): Promise<{ uri: string }[]> {
   const res = await wpQuery({
     query: `query GetAllPages {
-      pages(where: {status: PUBLISH}) {
+      pages(where: {status: PUBLISH}, first: 100) {
         nodes {
           uri
         }
@@ -33,13 +33,13 @@ export async function getAllPages(): Promise<{ uri: string }[]> {
 export async function getAllTerms(): Promise<{ name: string, uri: string }[]> {
   const res = await wpQuery({
     query: `query GetAllTerms {
-      categories {
+      categories(first: 100) {
         nodes {
           name
           uri
         }
       }
-      tags {
+      tags(first: 100) {
         nodes {
           name
           uri
