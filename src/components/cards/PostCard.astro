@@ -1,8 +1,7 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, Picture } from 'astro:assets';
 import { getFormattedDate } from '../../i18n/formatDateTime';
 import IconArrowRight from '../icons/IconArrowRight.astro';
-import IconArrowRightUp from '../icons/IconArrowRightUp.astro';
 import IconCalendar from '../icons/IconCalendar.astro';
 
 interface Props {
@@ -14,19 +13,18 @@ interface Props {
   href: string,
 };
 
-const { featuredImage = '/opengraph.webp', altText = '', title, dateGmt, excerpt, href }: Partial<Props> = Astro.props;
+const { featuredImage, altText = '', title, dateGmt, excerpt, href }: Partial<Props> = Astro.props;
 
 const formattedDate = await getFormattedDate(dateGmt);
 ---
 
 <li
-  class="h-full flex flex-col-reverse hover:shadow-md dark:shadow-black brightness-90 hover:brightness-100 focus:brightness-100 transition duration-300"
+  class="group/card h-full flex flex-col-reverse hover:shadow-md dark:shadow-black brightness-90 hover:brightness-100 focus:brightness-100 transition duration-300"
   tabindex="0"
   aria-label={title}
   :class="{'cursor-pointer': !preventClick}"
-  x-data="{ hovered: false, clickTimeout: null, preventClick: false }"
-  @mouseenter="hovered = true"
-  @mouseleave="hovered = false; clearTimeout(clickTimeout); preventClick = false"
+  x-data="{ clickTimeout: null, preventClick: false }"
+  @mouseleave="clearTimeout(clickTimeout); preventClick = false"
   @mousedown="event.preventClick = false; event.button === 2 ? preventClick = true : clickTimeout = setTimeout(() => preventClick = true, 200);"
   @mouseup=" clearTimeout(clickTimeout); if (!preventClick) { window.location = $refs.link.href; } preventClick = false;"
   @keydown.enter="window.location = $refs.link.href"
@@ -53,22 +51,30 @@ const formattedDate = await getFormattedDate(dateGmt);
       <span class="border-transparent border-b-2 hover:border-theme-900 dark:hover:border-theme-100 transition duration-300" aria-hidden="true">
         Read more
       </span>
-
-      <template x-if="hovered">
-        <IconArrowRightUp height={21} width={21} classes="self-center" />
-      </template>
-      <template x-if="!hovered">
-        <IconArrowRight height={21} width={21} classes="self-center" />
-      </template>
+      <IconArrowRight height={21} width={21} classes="self-center group-hover/card:-rotate-45" />
     </div>
   </article>
 
-  <Image
-      src={featuredImage}
-      width={800}
-      height={600}
-      format="webp"
-      class="h-full md:min-h-[216px] md:max-h-[216px] lg:max-h-56 min-w-full object-cover"
-      alt={altText}
-  />
+  { !featuredImage ?
+    (
+      <Image
+          src="/opengraph.webp"
+          height={480}
+          width={320}
+          format="webp"
+          class="h-full md:min-h-[216px] md:max-h-[216px] lg:max-h-56 min-w-full object-cover aspect-[4/3]"
+          alt={altText}
+      />
+    ) : (
+      <Picture
+          src={featuredImage}
+          widths={[480]}
+          sizes={`480px`}
+          inferSize
+          format="webp"
+          class="h-full md:min-h-[216px] md:max-h-[216px] lg:max-h-56 min-w-full object-cover aspect-[4/3]"
+          alt={altText}
+      />
+    )
+  }
 </li>
