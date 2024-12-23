@@ -15,7 +15,7 @@ interface Props {
 
 const { featuredImage, altText = '', title, dateGmt, excerpt, href }: Partial<Props> = Astro.props;
 
-const formattedDate = await getFormattedDate(dateGmt);
+const formattedDate = getFormattedDate(dateGmt);
 ---
 
 <li
@@ -71,7 +71,7 @@ const formattedDate = await getFormattedDate(dateGmt);
           widths={[480]}
           sizes={`480px`}
           inferSize
-          format="webp"
+          formats={['webp']}
           class="h-full md:min-h-[216px] md:max-h-[216px] lg:max-h-56 min-w-full object-cover aspect-[4/3]"
           alt={altText}
       />

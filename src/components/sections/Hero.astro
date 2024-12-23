@@ -30,7 +30,7 @@ const {
 
 let formattedDate;
 if (dateGmt) {
-  formattedDate = await getFormattedDate(dateGmt);
+  formattedDate = getFormattedDate(dateGmt);
 };
 
 let halfWidth;
@@ -47,7 +47,8 @@ if (featuredImage) {
         widths={[480, 900, 1600]}
         sizes={`(max-width: 768px) 480px, (max-width: 1280px) 900px, 1600px`}
         inferSize
-        format="webp"
+        formats={['webp']}
+        loading="eager"
         class="h-full w-full object-cover"
         alt={altText}
         />
