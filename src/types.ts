@@ -13,6 +13,15 @@ export interface menuItemsType {
 }
 
 // gqlRoutes
+export interface Author {
+  node: {
+    avatar: {
+      url: string;
+    };
+    name: string;
+    description: string;
+  }
+}
 
 export interface YoastSEO {
   breadcrumbs: {
@@ -47,6 +56,7 @@ export interface NodeByUri {
   name?: string;
   uri?: string;
   date?: string;
+  dateGmt?: string;
   content?: string;
   excerpt?: string;
   description?: string;
@@ -55,6 +65,7 @@ export interface NodeByUri {
   };
   featuredImage?: FeaturedImage | null;
   seo?: YoastSEO;
+  author: Author;
   // gqlPosts
   posts?: {
     nodes: {

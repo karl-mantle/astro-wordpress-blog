@@ -98,6 +98,15 @@ export async function getNodeByURI(uri: string): Promise<NodeByUri> {
             metaDesc
             title
           }
+          author {
+            node {
+              avatar {
+                url
+              }
+              name
+              description
+            }
+          }
         }
         ... on Page {
           uri

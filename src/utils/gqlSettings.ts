@@ -12,7 +12,7 @@ export async function getSiteTitle(): Promise<generalSettingsType> {
     }`
   });
 
-  return res.generalSettings;
+  return res.generalSettings.title;
 }
 
 export async function getSiteDescription(): Promise<generalSettingsType> {
