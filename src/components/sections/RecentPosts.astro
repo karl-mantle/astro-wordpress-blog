@@ -3,20 +3,21 @@ import type { PostCardType } from '../../types';
 import { getPostsByMostRecent } from '../../utils/gqlPosts';
 import PostCard from '../cards/PostCard.astro';
 import IconArrowRight from '../icons/IconArrowRight.astro';
+import PrimaryBtn from '../ui/PrimaryBtn.astro';
+import SecondaryBtn from '../ui/SecondaryBtn.astro';
 
 interface Props {
   orientation: 'row' | 'column';
   quantity: number;
   filteredBy: 'recent' | 'category' | 'tag'
   featuredPost?: boolean;
-  showViewAll?: boolean;
+  showCta?: boolean;
 }
 
-const { orientation = 'row', quantity = 3, filteredBy = 'recent', showViewAll = false }: Props = Astro.props;
+const { orientation = 'row', quantity = 3, filteredBy = 'recent', showCta = false }: Props = Astro.props;
 
 let orientationClasses = '';
 let getFilteredPosts: PostCardType[] = [];
-let hiddenStatus: string = 'hidden ';
 
 const mapPosts = (posts: any): PostCardType[] => {
   return posts.map((post: any) => ({ 
@@ -56,24 +57,23 @@ switch (filteredBy) {
     break;
 }
 
-if (showViewAll === true) {
-  hiddenStatus = '';
-}
-
 const posts: PostCardType[] = getFilteredPosts;
 ---
 
-<section class="not-prose flex flex-col py-8">
+<section class="not-prose flex flex-col md:mb-8">
 
-  <header class="relative flex flex-col md:flex-row justify-between mb-4 md:mb-8 md:pr-5">
-    <h2 class="p-2 md:p-0 md:mb-4 font-semibold text-3xl text-theme-800 dark:text-theme-200 border-b-2 border-theme-300 dark:border-theme-700 md:border-transparent md:dark:border-transparent">Recent Posts</h2>
-    <a
-      class={`${hiddenStatus}group/btn flex flex-row justify-between items-center text-theme-800 hover:text-theme-900 dark:text-theme-200 dark:hover:text-theme-100 border-b-2 border-transparent hover:border-theme-900 dark:hover:border-theme-100 transition duration-300`}
-      href="/blog/"
-    >
-      <span class="flex p-2 text-lg md:text-base font-semibold" aria-hidden="false">View all posts</span>
-      <IconArrowRight height={21} width={21} classes="self-center group-hover/btn:-rotate-45" />
-    </a>
+  <header class="relative flex flex-col md:flex-row justify-between mb-8 md:pr-5">
+    <h2 class="p-2 md:p-0 md:mb-4 font-semibold text-2xl text-theme-800 dark:text-theme-200 border-b-2 border-theme-300 dark:border-theme-700 md:border-transparent md:dark:border-transparent">Recent Posts</h2>
+
+    { showCta && (
+      <div class="hidden md:block mt-auto">
+        <SecondaryBtn
+          url="/blog/"
+          text="View all posts"
+          icon={true}
+        />
+      </div>
+    )}
 
     <div class="absolute bottom-0 -z-40 block w-full border-b-2 border-theme-300 dark:border-theme-700" aria-hidden="true"></div>
   </header>
@@ -94,5 +94,15 @@ const posts: PostCardType[] = getFilteredPosts;
       })
     }
   </ul>
+
+  { (showCta || orientation === 'column') && (
+    <div class={ orientation === 'row' ? `py-4 md:hidden` : `py-4 md:py-8` }>
+      <PrimaryBtn
+        url="/blog/"
+        text="View all posts"
+        icon={true}
+      />
+    </div>
+  )}
 
 </section>

@@ -47,11 +47,11 @@ const formattedDate = await getFormattedDate(dateGmt);
       {excerpt}
     </p>
     
-    <div class="flex gap-2 mt-auto font-medium text-theme-800 hover:text-theme-900 dark:text-theme-200 dark:hover:text-theme-100 transition duration-300">
-      <span class="border-transparent border-b-2 hover:border-theme-900 dark:hover:border-theme-100 transition duration-300" aria-hidden="true">
+    <div class="flex gap-2 items-center p-2 mt-auto mr-auto text-theme-800 hover:text-theme-900 dark:text-theme-200 dark:hover:text-theme-100 border-transparent border-b-2 hover:border-theme-900 dark:hover:border-theme-100 transition duration-300">
+      <span class="font-medium" aria-hidden="true">
         Read more
       </span>
-      <IconArrowRight height={21} width={21} classes="self-center group-hover/card:-rotate-45" />
+      <IconArrowRight height={21} width={21} classes="group-hover/card:-rotate-45 transition duration-300" />
     </div>
   </article>
 
