@@ -1,19 +1,32 @@
 ---
 import type { NodeByUri } from '../types';
 import { getNodeByURI } from '../utils/gqlRoutes';
-import Layout from '../layouts/Layout.astro'
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/sections/Hero.astro';
 import RecentPosts from '../components/sections/RecentPosts.astro';
 
 const node: NodeByUri = await getNodeByURI("/");
 ---
 
 <Layout title={node.seo?.title || node.title} metaDesc={node.seo?.metaDesc}>
-
+  <Hero
+    featuredImage={node.featuredImage?.node.sourceUrl}
+    altText={node.featuredImage?.node.altText}
+    title="Lorem ipsum sic dolurum est, magnifica ulum delit"
+    content={node.content}
+    primaryBtn={true}
+    primaryBtnUrl="/blog/"
+    primaryBtnText="Read more"
+    primaryBtnIcon={true}
+    secondaryBtn={true}
+    secondaryBtnUrl=""
+    secondaryBtnText="View the repo"
+    secondaryBtnIcon={true}
+  />
   <RecentPosts
     orientation='row'
     quantity={3}
     filteredBy='recent'
-    showViewAll={true}
+    showCta={true}
   />
-
 </Layout>

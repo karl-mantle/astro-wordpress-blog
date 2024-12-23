@@ -3,6 +3,8 @@ import type { NodeByUri } from '../types';
 import { getAllPosts, getNodeByURI } from '../utils/gqlRoutes';
 import Layout from '../layouts/Layout.astro';
 import RecentPosts from '../components/sections/RecentPosts.astro';
+import Hero from '../components/sections/Hero.astro';
+import AuthorCard from '../components/cards/AuthorCard.astro';
 
 interface Paths { 
   params: { post: string };
@@ -34,15 +36,26 @@ const { node } = Astro.props as { node: NodeByUri };
 ---
 
 <Layout title={node.seo?.title || node.title} metaDesc={node.seo?.metaDesc}>
+  <article>
+    <header>
+      <Hero
+        featuredImage={node.featuredImage?.node.sourceUrl}
+        altText={node.featuredImage?.node.altText}
+        title={node.title}
+        dateGmt={node.dateGmt}
+        excerpt={node.excerpt?.replace(/<(.|\n)*?>/g, '')}
+      />
+    </header>
 
-  <div class="flex flex-col md:flex-row gap-4 py-8">
-    <article class="flex-grow max-w-none" set:html={node.content}>
-      <h1>{node.title}</h1>
-      <!-- set:html content -->
-    </article>
-    <aside class="flex-shrink-0 md:w-72">
-      <RecentPosts orientation='column' quantity={3} filteredBy='recent'/>
-    </aside>
-  </div>
+    <div class="flex flex-col md:flex-row gap-8 md:gap-16 md:mb-8">
+      <article class="md:py-8" set:html={node.content}>
+        <!-- article content text -->
+      </article>
 
+      <aside class="flex-shrink-0 md:w-72 md:py-8">
+        <AuthorCard name={node.author.node.name} description={node.author.node.description} avatarUrl={node.author.node.avatar.url} />
+        <RecentPosts orientation='column' quantity={3} filteredBy='recent'/>
+      </aside>
+    </div>
+  </article>
 </Layout>

@@ -1,0 +1,102 @@
+---
+import { Picture } from 'astro:assets';
+import { getFormattedDate } from '../../i18n/formatDateTime';
+import PrimaryBtn from '../ui/PrimaryBtn.astro';
+import SecondaryBtn from '../ui/SecondaryBtn.astro';
+import IconCalendar from '../icons/IconCalendar.astro';
+
+interface Props {
+  featuredImage?: string,
+  altText?: string,
+  title?: string,
+  dateGmt?: string,
+  excerpt?: string,
+  content?: string,
+  primaryBtn?: boolean,
+  primaryBtnUrl?: string,
+  primaryBtnText?: string,
+  primaryBtnIcon?: boolean,
+  secondaryBtn?: boolean,
+  secondaryBtnUrl?: string,
+  secondaryBtnText?: string,
+  secondaryBtnIcon?: boolean,
+};
+
+const { 
+  featuredImage, altText = '', title, dateGmt, excerpt, content,
+  primaryBtn, primaryBtnUrl, primaryBtnText, primaryBtnIcon,
+  secondaryBtn, secondaryBtnUrl, secondaryBtnText, secondaryBtnIcon
+}: Partial<Props> = Astro.props;
+
+let formattedDate;
+if (dateGmt) {
+  formattedDate = await getFormattedDate(dateGmt);
+};
+
+let halfWidth;
+if (featuredImage) {
+  halfWidth = 'md:grid-cols-2'
+}
+---
+
+<section class={`not-prose grid grid-cols-1 ${halfWidth} mb-8 bg-theme-200 dark:bg-theme-800`}>
+  { featuredImage && (
+    <div class="order-1 md:order-2">
+      <Picture
+        src={featuredImage}
+        widths={[480, 900, 1600]}
+        sizes={`(max-width: 768px) 480px, (max-width: 1280px) 900px, 1600px`}
+        inferSize
+        format="webp"
+        class="h-full w-full object-cover"
+        alt={altText}
+        />
+    </div>
+  )}
+
+  <div class="order-2 md:order-1 flex flex-col gap-4 justify-center p-8 lg:py-8 lg:px-16">
+
+    { title &&  (
+      <h1 class="text-2xl md:text-3xl font-semibold text-theme-800 dark:text-theme-200">{title}</h1>
+    )}
+
+    { dateGmt &&  (
+      <span class="inline-flex gap-2" aria-hidden="false">
+        <IconCalendar height={16} width={16} />
+        <span class="sr-only">Post published on: </span>
+        <time class="text-theme-800 dark:text-theme-200" datetime={dateGmt}>{formattedDate}</time>
+      </span>
+    )}
+
+    { content && (
+      <div class="text-theme-800 dark:text-theme-200" set:html={content}></div>
+    )}
+
+    { excerpt && (
+      <p class="text-theme-800 dark:text-theme-200">{excerpt}</p>
+    )}
+
+    { (primaryBtn || secondaryBtn) && (
+      <div class="flex flex-col lg:flex-row gap-4">
+
+        { primaryBtn && (
+          <PrimaryBtn 
+            url={primaryBtnUrl}
+            text={primaryBtnText}
+            icon={primaryBtnIcon}
+          />
+        )}
+
+        { secondaryBtn && (
+          <SecondaryBtn 
+            url={secondaryBtnUrl}
+            text={secondaryBtnText}
+            icon={secondaryBtnIcon}
+          />
+        )}
+
+      </div>
+    )}
+
+  </div>
+</section>
