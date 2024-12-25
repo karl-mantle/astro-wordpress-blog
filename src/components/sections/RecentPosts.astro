@@ -2,7 +2,6 @@
 import type { PostCardType } from '../../types';
 import { getPostsByMostRecent } from '../../utils/gqlPosts';
 import PostCard from '../cards/PostCard.astro';
-import IconArrowRight from '../icons/IconArrowRight.astro';
 import PrimaryBtn from '../ui/PrimaryBtn.astro';
 import SecondaryBtn from '../ui/SecondaryBtn.astro';
 
@@ -63,7 +62,14 @@ const posts: PostCardType[] = getFilteredPosts;
 <section class="not-prose flex flex-col md:mb-8">
 
   <header class="relative flex flex-col md:flex-row justify-between mb-8 md:pr-5">
-    <h2 class="p-2 md:p-0 md:mb-4 font-semibold text-2xl text-theme-800 dark:text-theme-200 border-b-2 border-theme-300 dark:border-theme-700 md:border-transparent md:dark:border-transparent">Recent Posts</h2>
+
+    { (orientation === 'row') && (
+      <h2 class="p-2 md:p-0 my-auto font-semibold text-2xl text-theme-800 dark:text-theme-200 border-b-2 border-theme-300 dark:border-theme-700 md:border-transparent md:dark:border-transparent">Recent Posts</h2>
+    )}
+
+    { (orientation === 'column') && (
+      <h3 class="p-2 md:p-0 md:mb-4 font-semibold text-2xl text-theme-800 dark:text-theme-200 border-b-2 border-theme-300 dark:border-theme-700 md:border-transparent md:dark:border-transparent">Recent Posts</h3>
+    )}
 
     { showCta && (
       <div class="hidden md:block mt-auto">
